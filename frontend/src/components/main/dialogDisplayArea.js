@@ -1,16 +1,27 @@
-import { useContext } from "react";
-import { DataContext } from "../common/dataContext";
+import { useContext, useEffect, useRef } from "react";
 import DialogBox from "./dialogBox";
-import UserStatusBar from "./userStatusBar";
+import { DataContext } from "../common/dataContext";
 
 export default function DialogDisplayArea(){
-    const {selectedUser, setSelectedUser} = useContext(DataContext);
-    let active = selectedUser!=null;
+    const {selectedUser, chatHistory} = useContext(DataContext);
+    const displayAreaRef = useRef(null);
+    let chatWithCurUser = chatHistory[selectedUser.username];
+    if (chatWithCurUser === undefined){
+        chatWithCurUser = []
+    } 
+    useEffect(()=>{
+        chatWithCurUser = chatHistory[selectedUser.username]
+        console.log(chatWithCurUser)
+        displayAreaRef.current.scrollTop = displayAreaRef.current.scrollHeight;
+    },[chatHistory])
+
+    useEffect(()=>{
+        displayAreaRef.current.scrollTop = displayAreaRef.current.scrollHeight;
+    },[selectedUser])
 
     return (
-        <div className="dialog-display-area">
-            {active && <UserStatusBar></UserStatusBar>}
-            <DialogBox text="this is a dialog box" self={false}></DialogBox>
+        <div className="dialog-display-area" ref={displayAreaRef}>
+            {chatWithCurUser.map(chat => <DialogBox text={chat.text} self={chat.self}></DialogBox>)}
         </div>
     )
 }

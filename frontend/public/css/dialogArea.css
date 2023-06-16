@@ -1,11 +1,12 @@
 .dialog-box1,
 .dialog-box2 {
-    float:left;
     max-width: 200px;
     height: auto;
     /* width: 200px;
     height: 80px; */
-    margin: 50px;
+    margin: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
     background-color: skyblue;
     border-bottom-color: skyblue;
     color: #fff;
@@ -43,9 +44,13 @@
     transform: rotate(45deg);
 }
 
-.dialog-display-area {
-    flex: 80%;
+.dialog-box1 {
+    align-self: flex-start;}
+
+.dialog-box2 {
+    align-self: flex-end;
 }
+
 
 .dialog-area {
     display: flex;
@@ -53,4 +58,46 @@
     flex: 70%;
     height: 100%;
     background-color:blueviolet;
+}
+
+.dialog-display-area {
+    /* max-height: 200px; Set the maximum height of the container */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    flex: 75%;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+  }
+
+.dialog-display-area::-webkit-scrollbar {
+width: 8px;
+}
+
+.dialog-display-area::-webkit-scrollbar-thumb {
+background-color: #888;
+border-radius: 4px;
+}
+
+.dialog-display-area::-webkit-scrollbar-track {
+background-color: #f1f1f1;
+border-radius: 4px;
+}
+  
+.dialog-box1,
+.dialog-box2 {
+background-color: #eee;
+margin-bottom: 10px;
+padding: 10px;
+transition: transform 0.3s; /* Apply transition to the transform property */
+}
+
+.dialog-box1-enter,
+.dialog-box2-enter {
+transform: translateY(100%); /* Initial position for new divs */
+}
+
+.dialog-box1-enter-active ,
+.dialog-box2-enter-active {
+transform: translateY(0); /* Final position for new divs */
+transition: transform 0.3s; /* Apply transition to the transform property */
 }

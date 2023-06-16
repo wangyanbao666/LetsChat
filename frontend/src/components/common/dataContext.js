@@ -8,10 +8,13 @@ function DataProvider({ children }) {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null)
+  const [userInfo, setUserInfo] = useState({})
+  const [friends, setFriends] = useState([])
   const [chatHistory, setChatHistory] = useState({})
 
   return (
-    <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory}}>
+    <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
+    userInfo, setUserInfo, friends, setFriends}}>
       {children}
     </DataContext.Provider>
   );

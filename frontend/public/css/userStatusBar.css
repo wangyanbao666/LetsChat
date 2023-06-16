@@ -1,6 +1,16 @@
+.user-statusbar {
+    display: flex;
+}
+
 .user-statusbar-img {
     border-radius: 50%;
     height: 50px;
     width: 50px;
     margin: 10px 10px 10px 30px;
+}
+
+.user-statusbar-text-region {
+    margin-left: 10px;
+    margin-top: 10px;
+    
 }
