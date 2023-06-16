@@ -1,0 +1,6 @@
+.top-bar {
+    height: 10vh;
+    background-color: blue;
+    position: sticky; /* sticky positioning can help it stay at the top when you scroll */
+    top: 0; /* for sticky positioning */
+}

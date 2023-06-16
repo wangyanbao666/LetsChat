@@ -1,0 +1,56 @@
+.dialog-box1,
+.dialog-box2 {
+    float:left;
+    max-width: 200px;
+    height: auto;
+    /* width: 200px;
+    height: 80px; */
+    margin: 50px;
+    background-color: skyblue;
+    border-bottom-color: skyblue;
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 5px 12px 5px 12px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    position: relative;
+    word-break: break-all;
+}
+
+
+.dialog-box1::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    margin-top: -10px;
+    background: inherit;
+    transform: rotate(45deg);
+}
+
+.dialog-box2::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    margin-top: -10px;
+    background: inherit;
+    transform: rotate(45deg);
+}
+
+.dialog-display-area {
+    flex: 80%;
+}
+
+.dialog-area {
+    display: flex;
+    flex-direction: column;
+    flex: 70%;
+    height: 100%;
+    background-color:blueviolet;
+}

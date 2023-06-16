@@ -1,0 +1,10 @@
+.screen {
+    display: flex;
+    height: 100vh;
+    flex-direction: column; /* stacks children vertically */
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+}

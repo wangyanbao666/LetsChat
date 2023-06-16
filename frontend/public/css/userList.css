@@ -1,0 +1,35 @@
+.user-list {
+    flex: 30%;
+    height: 100%;
+    background-color: aqua;
+}
+
+.user-card-img {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    margin: 10px 10px 10px 10px;
+}
+
+.user-card {
+    display: flex;
+    border-radius: 6px;
+    margin: 5px;
+}
+
+.user-card.selected {
+    background-color:aquamarine;
+}
+
+/* .user-card .user-card-img {
+    width: 25%;
+} */
+
+.user-card .text-region {
+    width: 75%;
+}
+
+.user-card .text-region .username {
+    margin-top: 15px;
+}
+
