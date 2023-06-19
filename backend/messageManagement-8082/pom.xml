@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>userManagement-8080</artifactId>
+    <artifactId>messageManagement-8082</artifactId>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -18,11 +18,6 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.eureka</groupId>-->
-<!--            <artifactId>common</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

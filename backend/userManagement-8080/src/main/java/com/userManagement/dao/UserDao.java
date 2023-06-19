@@ -1,18 +1,17 @@
 package com.userManagement.dao;
 
-import com.commons.User;
-import org.apache.ibatis.annotations.Insert;
+import com.commons.entities.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 
 @Mapper
 public interface UserDao {
+    void createTable();
     User getUserById(@Param("id") long id);
     User getUserByName(@Param("username") String username);
-    void insertUser(User user);
+    void insertUser(@Param("user") User user);
 
 //    may be replaced with more specific conditions
-    void updateUser(User user);
+    void updateUser(@Param("user") User user);
 }

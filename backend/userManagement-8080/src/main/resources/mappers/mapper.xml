@@ -4,16 +4,31 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.userManagement.dao.UserDao">
-    <resultMap id="userResultMap" type="com.commons.User">
+    <insert id="createTable">
+        create table if not exists user_t (
+        id BIGINT AUTO_INCREMENT,
+        username varchar(50) unique,
+        password varchar(50),
+        email varchar(50),
+        group_ids TEXT,
+        connections TEXT,
+        last_online DATETIME,
+        status int,
+        PRIMARY KEY (id),
+        INDEX idx_username (username)
+        );
+    </insert>
+    <resultMap id="userResultMap" type="com.commons.entities.User">
         <id property="id" column="id" />
         <result property="username" column="username" />
         <result property="password" column="password" />
         <result property="email" column="email" />
-        <result property="groupIds" column="groupIds" javaType="int[]" jdbcType="VARCHAR" typeHandler="com.userManagement.typeHandler.IntArrayTypeHandler"/>
-        <result property="connections" column="connections" javaType="Long[]" jdbcType="VARCHAR" typeHandler="com.userManagement.typeHandler.LongArrayTypeHandler"/>
+        <result property="groupIds" column="groupIds" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
+        <result property="connections" column="connections" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
         <result property="lastOnline" column="lastOnline" />
         <result property="status" column="status" />
     </resultMap>
+
     <select id="getUserById" parameterType="Long" resultMap="userResultMap">
         select id, username, password, email, group_ids AS groupIds, connections,
             last_online AS lastOnline, status
@@ -26,14 +41,15 @@
         from user_t
         where username=#{username}
     </select>
-<!--    <insert id="insertUser" parameterType="com.commons.User">-->
-<!--        insert into user_t(id, username, password, email, group_ids, connections, last_online, status)-->
-<!--        values (null, #{username}, #{username}, #{password}, #{email}, #{groupIds}, #{connections}, #{lastOnline}, #{status})-->
-<!--    </insert>-->
-<!--    <update id="updateUser" parameterType="com.commons.User">-->
-<!--        update user_t set password=#{password}, email=#{email}, group_ids=#{group_ids},-->
-<!--            connections=#{connections}, last_online=#{lastOnline}, status=#{status}-->
-<!--        where username=#{username}-->
-<!--    </update>-->
+    <insert id="insertUser" parameterType="com.commons.entities.User">
+        INSERT INTO user_t (id, username, password, email, group_ids, connections, last_online, status)
+        VALUES (#{user.id}, #{user.username}, #{user.password}, #{user.email}, #{user.groupIds, typeHandler=com.commons.typeHandler.LongArrayTypeHandler},
+        #{user.connections, typeHandler=com.commons.typeHandler.LongArrayTypeHandler}, #{user.lastOnline}, #{user.status})
+    </insert>
+    <update id="updateUser" parameterType="com.commons.entities.User">
+        update user_t set username=#{user.username}, password=#{user.password}, email=#{user.email}, group_ids=#{user.groupIds, typeHandler=com.commons.typeHandler.LongArrayTypeHandler},
+            connections=#{user.connections, typeHandler=com.commons.typeHandler.LongArrayTypeHandler}, last_online=#{user.lastOnline}, status=#{user.status}
+        where id=#{user.id}
+    </update>
 
 </mapper>

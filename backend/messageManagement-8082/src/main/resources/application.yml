@@ -1,10 +1,9 @@
 server:
-  port: 8080
-
+  port: 8082
 
 spring:
   application:
-    name: userManagement
+    name: message-management
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -19,6 +18,8 @@ spring:
 #    baselineOnMigrate: true
 #    repeatable-sql-migration-prefix: "R"
 
+#    validate-migration-naming: true
+
 
 mybatis:
   mapper-locations: classpath:mappers/*.xml
@@ -28,7 +29,7 @@ mybatis:
 
 eureka:
   instance:
-    instance-id: user-management
+    instance-id: message-management
   client:
     service-url:
       defaultZone: http://localhost:8888/eureka/

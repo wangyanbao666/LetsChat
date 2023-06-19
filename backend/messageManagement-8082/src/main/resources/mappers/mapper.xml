@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.messageManagement.dao.MessageDao">
+    <insert id="createTable">
+        CREATE TABLE IF NOT EXISTS message_t (
+        id BIGINT AUTO_INCREMENT,
+        sender_id BIGINT,
+        receiver_id BIGINT,
+        content TEXT,
+        datetime_column DATETIME,
+        flag INT,
+        PRIMARY KEY (id),
+        INDEX idx_sender_id (sender_id),
+        INDEX idx_receiver_id (receiver_id)
+        )
+    </insert>
+    <select id="getMessageBySenderId" parameterType="long" resultType="com.commons.entities.Message">
+        select id, sender_id as senderId, receiver_id as receiverId, content,
+            datetime_column as datetime, flag
+        from message_t
+        where sender_id = #{id}
+    </select>
+    <select id="getMessageByReceiverId" parameterType="long" resultType="com.commons.entities.Message">
+        select id, sender_id as senderId, receiver_id as receiverId, content,
+            datetime_column as datetime, flag
+        from message_t
+        where receiver_id = #{id}
+    </select>
+    <select id="getMessageBySenderReceiverId" parameterType="long" resultType="com.commons.entities.Message">
+        select id, sender_id as senderId, receiver_id as receiverId, content,
+            datetime_column as datetime, flag
+        from message_t
+        where receiver_id = #{receiverId} and sender_id = #{senderId}
+    </select>
+    <insert id="insertMessage" parameterType="com.commons.entities.Message">
+        insert into message_t (id, sender_id, receiver_id, content, datetime_column, flag)
+        values
+            (null, #{message.senderId}, #{message.receiverId}, #{message.content}, #{message.datetime}, #{message.flag})
+    </insert>
+    <update id="updateMessage" parameterType="com.commons.entities.Message">
+        update message_t
+        set flag=#{message.flag}, content=#{message.content}
+        where id = #{message.id}
+    </update>
+    <update id="updateMessages" parameterType="com.commons.entities.Message">
+        update message_t
+        <foreach collection="messages" item="message">
+            set flag=#{message.flag}, content=#{message.content}
+            where id = #{message.id}
+        </foreach>
+    </update>
+
+
+</mapper>

@@ -1,26 +1,25 @@
-package com.userManagement;
+package com.messageManagement;
 
-import com.userManagement.dao.UserDao;
+import com.messageManagement.dao.MessageDao;
 import jakarta.annotation.Resource;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
-public class UserManagementApplication implements ApplicationRunner {
+public class MessageManagementApplication implements ApplicationRunner {
     @Resource
-    private UserDao userDao;
+    private MessageDao messageDao;
+
     public static void main(String[] args) {
-        SpringApplication.run(UserManagementApplication.class, args);
+        SpringApplication.run(MessageManagementApplication.class, args);
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        userDao.createTable();
+        messageDao.createTable();
     }
 }

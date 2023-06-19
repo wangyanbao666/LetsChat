@@ -10,6 +10,9 @@
   <modules>
     <module>userManagement-8080</module>
     <module>common</module>
+      <module>messageManagement-8082</module>
+      <module>eureka-8888</module>
+      <module>communication-8084</module>
   </modules>
 
 
