@@ -2,6 +2,7 @@ import $ from "jquery"
 import { useContext, useEffect, useRef, useState } from "react";
 import { DataContext } from "../common/dataContext";
 import { useNavigate } from "react-router-dom";
+import config from "../../config";
 
 export default function Login(){
 
@@ -17,7 +18,8 @@ export default function Login(){
 	const [loginVisibility, setLoginVisibility] = useState(false)
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
-	const {setUsername, setHistory, history} = useContext(DataContext)
+	const {setUsername, setUserInfo, setChatHistory, setFriends, history, websocket, setWebsocket} = useContext(DataContext)
+
 
     function handleSubmit(event){
         event.preventDefault(); // 👈️ prevent page refresh
@@ -25,31 +27,45 @@ export default function Login(){
 		let passwordValue = password.current.value
 		console.log(emailValue, passwordValue)
 		if (isRegister){
-			$.post("http://localhost:8080/register",{username:emailValue, password:passwordValue}, (success)=>{
-
-				if (success){
-					changeRegister()
-					alert(`Register Successfully, Welcome ${emailValue}!`)
+			$.ajax({
+				url: config.registerUrl,
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({ username: emailValue, password: passwordValue }),
+				success: function(result) {
+					let statusCode = result.code;
+					let message = result.message;
+					alert(message);
+					if (statusCode == 200){
+						changeRegister();
+					}
+				},
+				error: function(xhr, textStatus, errorThrown) {
+					// Handle error
 				}
-				else{
-					alert(`The username has been registered, please choose another one.`)
-				}
-			})
+			});
 		}
 		else {
-			$.post("http://localhost:8080/login",{username:emailValue, password:passwordValue}, (data)=>{
-				const success = data["success"]
-				const userHistory = data["history"]
-				if (success){
-					setUsername(emailValue)
-					setHistory(userHistory)
-					setIsLoggedIn(true)
-					navigate("/")
-					alert(`Login Successfully, Welcome ${emailValue}!`)
+			$.ajax({
+				url: config.loginUrl,
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({username:emailValue, password:passwordValue}),
+				success: function(result){
+					let statusCode = result.code;
+					let message = result.message;
+					alert(message);
+					if (statusCode == 200){
+						console.log(result.data)
+						// setUsername(emailValue)
+						// setHistory(userHistory)
+						let userId = result.data.user.id;
+						setIsLoggedIn(true);
+						loadUserData(result.data, userId);
+						navigate("/");
+					}
 				}
-				else{
-					alert(`The username or password is not correct.`)
-				}
+
 			})
 		}
         return false;
@@ -59,11 +75,20 @@ export default function Login(){
 		navigate("/")
 	}
 
+	function loadUserData(data, userId){
+		let connections = data.connections;
+		let userInfo = data.user;
+		let history = data.chatHistory;
+		console.log(history)
+		console.log(connections)
+		setUserInfo(userInfo);
+		setFriends(connections);
+		setChatHistory(history);
+	}
+
 
 	function changeRegister(){
-		console.log(isRegister)
 		if (isRegister){
-			console.log(1)
 			setIsRegister(false)
 			let button = document.getElementById("loginButton")
 			button.textContent = "Login"
@@ -71,7 +96,6 @@ export default function Login(){
 			setRegisterVisibility(true)
 		}
 		else {
-			console.log(2)
 			setIsRegister(true)
 			console.log(isRegister)
 			let button = document.getElementById("loginButton")

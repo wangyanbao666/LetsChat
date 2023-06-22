@@ -50,10 +50,21 @@ public class UserService {
                     info.put("user", checkUser);
                     checkUser.setStatus(1);
                     userDao.updateUser(checkUser);
+                    List<Long> connections = checkUser.getConnections();
+                    try {
+                        List<User> users = userDao.getUserByIds(connections);
+                        users.forEach(userConnected -> {
+                            userConnected.setPassword(null);
+                        });
+                        info.put("connections", users);
+                    } catch (Exception e){
+                        throw new Exception();
+                    }
                     CommonResult<Map<Long, List<Message>>> commonResult = messageManagementClient.getChatHistory(checkUser.getId());
                     Map<Long, List<Message>> chatHistory;
                     if (commonResult.getCode()==200){
                         chatHistory = commonResult.getData();
+                        System.out.println(chatHistory);
                         info.put("chatHistory", chatHistory);
                     }
                     else {

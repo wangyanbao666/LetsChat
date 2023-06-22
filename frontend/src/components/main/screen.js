@@ -14,22 +14,22 @@ export default function Screen(){
     const {chatHistory, setChatHistory} = useContext(DataContext);
 
     useEffect(() => {
-        setFriends([
-            {"id": 1, "username": "wyb", "image": null, "status": "online"},
-            {"id": 2, "username": "abc", "image": null, "status": "offline"}
-        ]);
+        // setFriends([
+        //     {"id": 1, "username": "wyb", "image": null, "status": "online"},
+        //     {"id": 2, "username": "abc", "image": null, "status": "offline"}
+        // ]);
 
-        const chatHistoryData = {
-            "wyb": [
-                {"text": "hello", "self": false},
-                {"text": "nice to meet you", "self": true}
-            ],
-            "abc": [
-                {"text": "nice to meet you", "self": false},
-                {"text": "hello", "self": true}
-            ],
-        };
-        setChatHistory(chatHistoryData);
+        // const chatHistoryData = {
+        //     "1": [
+        //         {"text": "hello", "self": false},
+        //         {"text": "nice to meet you", "self": true}
+        //     ],
+        //     "2": [
+        //         {"text": "nice to meet you", "self": false},
+        //         {"text": "hello", "self": true}
+        //     ],
+        // };
+        // setChatHistory(chatHistoryData);
     }, []);
 
 

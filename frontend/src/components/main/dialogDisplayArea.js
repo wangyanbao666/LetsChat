@@ -5,12 +5,12 @@ import { DataContext } from "../common/dataContext";
 export default function DialogDisplayArea(){
     const {selectedUser, chatHistory} = useContext(DataContext);
     const displayAreaRef = useRef(null);
-    let chatWithCurUser = chatHistory[selectedUser.username];
+    let chatWithCurUser = chatHistory[selectedUser.id];
     if (chatWithCurUser === undefined){
         chatWithCurUser = []
     } 
     useEffect(()=>{
-        chatWithCurUser = chatHistory[selectedUser.username]
+        chatWithCurUser = chatHistory[selectedUser.id]
         console.log(chatWithCurUser)
         displayAreaRef.current.scrollTop = displayAreaRef.current.scrollHeight;
     },[chatHistory])
@@ -21,7 +21,7 @@ export default function DialogDisplayArea(){
 
     return (
         <div className="dialog-display-area" ref={displayAreaRef}>
-            {chatWithCurUser.map(chat => <DialogBox text={chat.text} self={chat.self}></DialogBox>)}
+            {chatWithCurUser.map(chat => <DialogBox text={chat.content} self={chat.senderId!==selectedUser.id}></DialogBox>)}
         </div>
     )
 }

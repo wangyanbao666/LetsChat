@@ -10,7 +10,6 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Message {
     private long id;
     private String content;
@@ -20,5 +19,10 @@ public class Message {
 
 //    sent, seen, delivered
     private int flag;
+
+    Message(){
+        datetime = Timestamp.valueOf(LocalDateTime.now());
+        flag = 0;
+    }
 
 }

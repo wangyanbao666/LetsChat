@@ -2,12 +2,12 @@ import { useRef } from "react";
 import { useContext } from "react";
 import { DataContext } from "../common/dataContext";
 
+
 // text bar + a send button
 export default function InputBar(){
     const messageBoxRef = useRef(null)
-    const {selectedUser, chatHistory, setChatHistory} = useContext(DataContext);
-    let chatWithCurUser = chatHistory[selectedUser.username];
-
+    const {selectedUser, chatHistory, setChatHistory, websocket, userInfo} = useContext(DataContext);
+	const { updateChatHistory } = useContext(DataContext);
     function sendMessage(event){
         event.preventDefault();
         // send to the backend
@@ -15,14 +15,23 @@ export default function InputBar(){
         if (text === ""){
             return;
         }
-        const newChat = [...chatWithCurUser, { text: text, self: true }];
-        setChatHistory(chatHistory => ({
-            ...chatHistory,
-            [selectedUser.username]: newChat
-        }));
-        messageBoxRef.current.value="";
+        let message = {
+            senderId: userInfo.id,
+            content: text,
+            receiverId: selectedUser.id,
+        }
+        if (websocket!==null){
+            websocket.send("/app/chat", {}, JSON.stringify(message));
+            updateChatHistory(selectedUser.id, text, true);
+            messageBoxRef.current.value="";
+        }
+        else {
+            alert("you are not connected to the server, please login again")
+        }
+
 
     }   
+
     return (
         <div className="input-bar">
             <div className="send">

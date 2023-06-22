@@ -7,7 +7,7 @@ export default function UserStatusBar(){
     useEffect(() => {
         // This code will run whenever selectedUserId changes
         // Place the code you want to auto reload here
-        console.log('UserStatusBar reloaded!');
+        // console.log('UserStatusBar reloaded!');
       }, [selectedUser]);
 
     const imageLink = selectedUser.image==null ? "/imgs/selfie-place-holder.jpg" : selectedUser.image;
@@ -17,7 +17,7 @@ export default function UserStatusBar(){
             <img src={imageLink} className="user-statusbar-img"></img>
             <div className="user-statusbar-text-region">
                 <div className="username">{selectedUser.username}</div>
-                <div>{selectedUser.status}</div>
+                <div>{selectedUser.status===0 ? "offline" : "online"}</div>
             </div>
         </div>
     )
