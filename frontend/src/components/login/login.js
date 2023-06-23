@@ -79,11 +79,16 @@ export default function Login(){
 		let connections = data.connections;
 		let userInfo = data.user;
 		let history = data.chatHistory;
-		console.log(history)
-		console.log(connections)
+		console.log("loading data...")
+		// console.log(history)
+		// console.log(connections)
 		setUserInfo(userInfo);
 		setFriends(connections);
 		setChatHistory(history);
+	}
+
+	function preprocessChatHistory(connections, history){
+
 	}
 
 

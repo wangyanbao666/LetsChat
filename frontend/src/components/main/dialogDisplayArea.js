@@ -11,7 +11,6 @@ export default function DialogDisplayArea(){
     } 
     useEffect(()=>{
         chatWithCurUser = chatHistory[selectedUser.id]
-        console.log(chatWithCurUser)
         displayAreaRef.current.scrollTop = displayAreaRef.current.scrollHeight;
     },[chatHistory])
 
@@ -21,7 +20,7 @@ export default function DialogDisplayArea(){
 
     return (
         <div className="dialog-display-area" ref={displayAreaRef}>
-            {chatWithCurUser.map(chat => <DialogBox text={chat.content} self={chat.senderId!==selectedUser.id}></DialogBox>)}
+            {chatWithCurUser.map(chat => <DialogBox text={chat.content} self={chat.self}></DialogBox>)}
         </div>
     )
 }

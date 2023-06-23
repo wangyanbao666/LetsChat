@@ -16,17 +16,20 @@ function DataProvider({ children }) {
   const [websocket, setWebsocket] = useState(null);
 
 
-  const updateChatHistory = (id, content, senderId) => {
-    let chatWithCurUser = chatHistory[id];
-    if (chatWithCurUser === undefined){
-      chatWithCurUser = []
-    }
-    const newChat = [...chatWithCurUser, { content: content, senderId: senderId, receiverId: id }];
-    setChatHistory((chatHistory) => ({
-      ...chatHistory,
-      [id]: newChat,
-    }));
+  const updateChatHistory = (id, content, self) => {
+    setChatHistory(prevChatHistory => {
+      let chatWithCurUser = prevChatHistory[id] || [];
+      const newChat = [...chatWithCurUser, { content: content, self: self, senderId: id }];
+      return {
+        ...prevChatHistory,
+        [id]: newChat,
+      };
+    });
   }
+
+  useEffect(() => {
+    console.log(chatHistory);
+  }, [chatHistory]);
 
 
   const setupConnection = () => {
@@ -39,11 +42,12 @@ function DataProvider({ children }) {
     stompClient.connect({}, function(frame) {
       console.log('Connected: ' + frame);
       stompClient.subscribe(`/queue/${userId}/chat`, function(data) {
-        let message = data.body;
+        let messageString = data.body;
+        let message = JSON.parse(messageString);
         let senderId = message.senderId;
-        let receiveId = message.receiveId;
+        let receiverId = message.receiverId;
         let content = message.content;
-        updateChatHistory(senderId, content, receiveId);
+        updateChatHistory(senderId, content, false);
       });
     });
     setWebsocket(stompClient);
