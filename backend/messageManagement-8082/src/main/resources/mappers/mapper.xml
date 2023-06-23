@@ -31,11 +31,11 @@
         where receiver_id = #{id}
         order by id
     </select>
-    <select id="getMessageBySenderReceiverId" parameterType="long" resultType="com.commons.entities.Message">
+    <select id="getMessageBySenderIdReceiverId" parameterType="long" resultType="com.commons.entities.Message">
         select id, sender_id as senderId, receiver_id as receiverId, content,
             datetime_column as datetime, flag
         from message_t
-        where receiver_id = #{receiverId} and sender_id = #{senderId}
+        where receiver_id = #{id} or sender_id = #{id}
         order by id
     </select>
     <insert id="insertMessage" parameterType="com.commons.entities.Message">

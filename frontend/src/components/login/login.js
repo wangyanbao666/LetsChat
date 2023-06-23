@@ -2,6 +2,7 @@ import $ from "jquery"
 import { useContext, useEffect, useRef, useState } from "react";
 import { DataContext } from "../common/dataContext";
 import { useNavigate } from "react-router-dom";
+import { compareByDatetime } from "../../utils/compareMethods";
 import config from "../../config";
 
 export default function Login(){
@@ -80,16 +81,47 @@ export default function Login(){
 		let userInfo = data.user;
 		let history = data.chatHistory;
 		console.log("loading data...")
-		// console.log(history)
+		console.log(history)
 		// console.log(connections)
+		let [processedConnections, processedHistory] = preprocessChatHistory(connections, history, userId)
 		setUserInfo(userInfo);
-		setFriends(connections);
-		setChatHistory(history);
+		setFriends(processedConnections);
+		setChatHistory(processedHistory);
 	}
 
-	function preprocessChatHistory(connections, history){
+	function preprocessChatHistory(connections, history, userId){
+		let lastChat = [];
+		let processedHistory = {};
+		let keys = Object.keys(history);
+		for (let key of keys){
+			lastChat.push(history[key][history[key].length-1])
+			processedHistory[key] = []
+			history[key].forEach(element => {
+				let singleHistory = {}
+				singleHistory["self"] = element.senderId === userId;
+				singleHistory["content"] = element.content;
+				processedHistory[key].push(singleHistory) 
+			});
+		}
+		lastChat.sort(compareByDatetime)
+
+		let processedConnections = []
+		for (let item of lastChat){
+			let id = item.senderId === userId ? item.receiverId : item.senderId;
+			for (let connection of connections){
+				if (connection.id === id){
+					processedConnections.push(connection)
+					break;
+				}
+			}
+		}
+
+		// console.log(processedConnections)
+		// console.log(processedHistory)
+		return [processedConnections, processedHistory]
 
 	}
+
 
 
 	function changeRegister(){

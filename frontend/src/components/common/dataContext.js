@@ -19,7 +19,7 @@ function DataProvider({ children }) {
   const updateChatHistory = (id, content, self) => {
     setChatHistory(prevChatHistory => {
       let chatWithCurUser = prevChatHistory[id] || [];
-      const newChat = [...chatWithCurUser, { content: content, self: self, senderId: id }];
+      const newChat = [...chatWithCurUser, { content: content, self: self}];
       return {
         ...prevChatHistory,
         [id]: newChat,

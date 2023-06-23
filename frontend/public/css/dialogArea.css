@@ -7,9 +7,9 @@
     margin: 10px;
     margin-left: 40px;
     margin-right: 40px;
-    background-color: skyblue;
+    /* background-color: skyblue; */
     border-bottom-color: skyblue;
-    color: #fff;
+    /* color: #fff; */
     font-size: 12px;
     line-height: 18px;
     padding: 5px 12px 5px 12px;
@@ -45,9 +45,11 @@
 }
 
 .dialog-box1 {
+    background-color: #eee;
     align-self: flex-start;}
 
 .dialog-box2 {
+    background-color: #08c44d;
     align-self: flex-end;
 }
 
@@ -85,10 +87,9 @@ border-radius: 4px;
   
 .dialog-box1,
 .dialog-box2 {
-background-color: #eee;
-margin-bottom: 10px;
-padding: 10px;
-transition: transform 0.3s; /* Apply transition to the transform property */
+    margin-bottom: 10px;
+    padding: 10px;
+    transition: transform 0.3s; /* Apply transition to the transform property */
 }
 
 .dialog-box1-enter,

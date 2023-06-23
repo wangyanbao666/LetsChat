@@ -6,14 +6,13 @@ import com.commons.entities.User;
 import com.userManagement.clients.MessageManagementClient;
 import com.userManagement.dao.UserDao;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
+@Slf4j
 public class UserService {
     @Resource
     private UserDao userDao;
@@ -51,15 +50,16 @@ public class UserService {
                     checkUser.setStatus(1);
                     userDao.updateUser(checkUser);
                     List<Long> connections = checkUser.getConnections();
-                    try {
-                        List<User> users = userDao.getUserByIds(connections);
-                        users.forEach(userConnected -> {
-                            userConnected.setPassword(null);
-                        });
-                        info.put("connections", users);
-                    } catch (Exception e){
-                        throw new Exception();
+
+                    List<User> users = new ArrayList<>();
+                    if (connections.size()>0){
+                        users = userDao.getUserByIds(connections);
                     }
+                    users.forEach(userConnected -> {
+                        userConnected.setPassword(null);
+                    });
+                    info.put("connections", users);
+
                     CommonResult<Map<Long, List<Message>>> commonResult = messageManagementClient.getChatHistory(checkUser.getId());
                     Map<Long, List<Message>> chatHistory;
                     if (commonResult.getCode()==200){
@@ -73,7 +73,7 @@ public class UserService {
                     result = new CommonResult(200, "Login Successfully!", info);
                     return result;
                 } catch (Exception e){
-                    e.getStackTrace();
+                    log.error(Arrays.toString(e.getStackTrace()));
                     result = new CommonResult(402, "The server has internal errors, please wait for a while.", null);
                     return result;
                 }
