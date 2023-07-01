@@ -19,7 +19,7 @@ export default function Login(){
 	const [loginVisibility, setLoginVisibility] = useState(false)
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
-	const {setUsername, setUserInfo, setChatHistory, setFriends, history, websocket, setWebsocket} = useContext(DataContext)
+	const {setUsername, setUserInfo, setChatHistory, setFriends, setConnectionRequest, history, websocket, setWebsocket} = useContext(DataContext)
 
 
     function handleSubmit(event){
@@ -80,13 +80,16 @@ export default function Login(){
 		let connections = data.connections;
 		let userInfo = data.user;
 		let history = data.chatHistory;
+		let invitations = data.invitations
 		console.log("loading data...")
-		console.log(history)
+		// console.log(history)
 		// console.log(connections)
 		let [processedConnections, processedHistory] = preprocessChatHistory(connections, history, userId)
 		setUserInfo(userInfo);
 		setFriends(processedConnections);
 		setChatHistory(processedHistory);
+		// console.log(invitations)
+		setConnectionRequest(invitations);
 	}
 
 	function preprocessChatHistory(connections, history, userId){

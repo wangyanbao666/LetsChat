@@ -73,9 +73,8 @@ public class UserService {
                     info.put("chatHistory", chatHistory);
 
                     List<Connection> invitations = publishConnectionRequestService.getConnections(checkUser.getId());
-                    if (invitations!=null){
+                    if (invitations!=null) {
                         log.info(invitations.toString());
-
                     }
                     info.put("invitations", invitations);
 

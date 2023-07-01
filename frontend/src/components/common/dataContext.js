@@ -14,6 +14,11 @@ function DataProvider({ children }) {
   const [friends, setFriends] = useState([]);
   const [chatHistory, setChatHistory] = useState({});
   const [websocket, setWebsocket] = useState(null);
+  const [connectionRequest, setConnectionRequest] = useState([
+    {
+      senderName: "default",
+  }
+  ]);
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
 
@@ -73,7 +78,7 @@ function DataProvider({ children }) {
   return (
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
     userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
-    showHandleConnectionPopUp, setShowHandleConnectionPopUp}}>
+    showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest}}>
       {children}
     </DataContext.Provider>
   );

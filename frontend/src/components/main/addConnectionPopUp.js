@@ -44,7 +44,7 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
     }
 
     return (
-        <div className="add-connection-pop-up" ref={ref}>
+        <div className="add-connection-popup" ref={ref}>
             <input type="text" placeholder="search username" className="usersearchbar" ref={inputRef} tabIndex={0} onKeyDown={handleInputKeyDown}></input>
             <button className="send-invitation" onClick={sendInvitation}>Send Invitation</button>
         </div> 
