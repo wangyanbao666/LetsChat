@@ -1,0 +1,27 @@
+.add-connection-pop-up {
+    z-index: 100;
+    margin: 200px;
+    padding: 20px;
+    background-color: beige;
+    border-radius: 5px;
+    width: 50%;
+    position: absolute;
+    transition: all 5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-connection-pop-up .usersearchbar {
+    height: 40px;
+    width: 100%;
+    font-size: 25px;
+    margin: auto;
+    text-indent: 10px;
+}
+
+.add-connection-pop-up .send-invitation {
+    font-size: medium;
+    background-color:coral;
+    margin: 10px;
+}
+

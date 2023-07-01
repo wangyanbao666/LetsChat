@@ -3,17 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
     "jquery": "^3.7.0",
+    "net-browserify": "^0.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.12.1",
     "react-scripts": "5.0.1",
     "socketjs-client": "^1.0.2",
     "sockjs-client": "^1.6.1",
+    "tls-browserify": "^0.2.2",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34",
     "ws": "^8.13.0"
@@ -41,5 +47,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "querystring-es3": "^0.2.1",
+    "stream-browserify": "^3.0.0"
   }
 }
