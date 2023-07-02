@@ -17,13 +17,43 @@ function DataProvider({ children }) {
   const [connectionRequest, setConnectionRequest] = useState([
     {
       senderName: "default",
+      handled: 0,
+  },
+    {
+      senderName: "default1",
+      handled: 1,
+  },
+    {
+      senderName: "default2",
+      handled: 2,
+  }
+  ,
+    {
+      senderName: "default2",
+      handled: 2,
+  }
+  ,
+    {
+      senderName: "default2",
+      handled: 2,
+  }
+  ,
+    {
+      senderName: "default2",
+      handled: 2,
   }
   ]);
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
 
 
-  const updateChatHistory = (id, content, self) => {
+  const updateChatHistory = (id, content, self, senderId, receiverId) => {
+    let message = {
+      senderId: senderId,
+      content: content,
+      receiverId: receiverId,
+  }
+    websocket.send("/app/chat", {}, JSON.stringify(message));
     setChatHistory(prevChatHistory => {
       let chatWithCurUser = prevChatHistory[id] || [];
       const newChat = [...chatWithCurUser, { content: content, self: self}];
@@ -54,7 +84,7 @@ function DataProvider({ children }) {
         let senderId = message.senderId;
         let receiverId = message.receiverId;
         let content = message.content;
-        updateChatHistory(senderId, content, false);
+        updateChatHistory(senderId, content, false, senderId, receiverId);
       });
     });
     setWebsocket(stompClient);

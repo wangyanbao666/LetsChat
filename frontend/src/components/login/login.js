@@ -89,6 +89,9 @@ export default function Login(){
 		setFriends(processedConnections);
 		setChatHistory(processedHistory);
 		// console.log(invitations)
+		if (invitations==null){
+			invitations = []
+		}
 		setConnectionRequest(invitations);
 	}
 

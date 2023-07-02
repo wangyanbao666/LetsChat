@@ -142,6 +142,7 @@ public class UserService {
                 receiver.getConnections().add(sender.getId());
                 userDao.updateUser(sender);
                 userDao.updateUser(receiver);
+                result.setData(sender);
             }
             publishConnectionRequestService.handleConnectionRequest(connection);
             return result;

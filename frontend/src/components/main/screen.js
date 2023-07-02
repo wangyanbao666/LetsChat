@@ -9,9 +9,9 @@ import UserList from "./userList";
 import { DataContext } from "../common/dataContext";
 
 export default function Screen(){
-    const {userInfo, setUserInfo} = useContext(DataContext);
-    const {friends, setFriends} = useContext(DataContext);
-    const {chatHistory, setChatHistory} = useContext(DataContext);
+    // const {userInfo, setUserInfo} = useContext(DataContext);
+    // const {friends, setFriends} = useContext(DataContext);
+    // const {chatHistory, setChatHistory} = useContext(DataContext);
 
     // useEffect(() => {
     //     // setFriends([

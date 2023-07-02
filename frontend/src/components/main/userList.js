@@ -8,7 +8,7 @@ import UserCard from "./userCard"
 export default function UserList(props){
     const users = props.users;
     const [selectedId, setSelectedId] = useState(0);
-    const {friends, setFriends} = useContext(DataContext)
+    const {friends} = useContext(DataContext)
     const handleClick = (id) => {
         setSelectedId(id);
       }

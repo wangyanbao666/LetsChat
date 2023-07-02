@@ -15,14 +15,8 @@ export default function InputBar(){
         if (text === ""){
             return;
         }
-        let message = {
-            senderId: userInfo.id,
-            content: text,
-            receiverId: selectedUser.id,
-        }
         if (websocket!==null){
-            websocket.send("/app/chat", {}, JSON.stringify(message));
-            updateChatHistory(selectedUser.id, text, true);
+            updateChatHistory(selectedUser.id, text, true, userInfo.id, selectedUser.id);
             messageBoxRef.current.value="";
         }
         else {

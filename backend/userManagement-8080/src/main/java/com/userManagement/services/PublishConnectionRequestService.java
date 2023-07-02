@@ -44,7 +44,8 @@ public class PublishConnectionRequestService {
         List<Connection> connections = redisDao.getConnections(connection.getReceiverId());
         if (connections!=null){
             for (Connection connection1: connections){
-                if (connection1.getSenderId() == connection.getSenderId()){
+                log.info(connection1.toString());
+                if (connection1.getSenderId() == connection.getSenderId() && connection1.getHandled()!=2){
                     return;
                 }
             }

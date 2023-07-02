@@ -1,6 +1,7 @@
 package com.userManagement.dao;
 
 import com.commons.entities.Connection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class RedisDao {
     private final RedisTemplate redisTemplate;
     private final String CONNECTION_DICT_KEY = "connection";
@@ -36,6 +38,7 @@ public class RedisDao {
     }
 
     public void updateConnection(Connection connection){
+        log.info("state: "+String.valueOf(connection.getHandled()));
         HashOperations<String, String, List<Connection>> hashOps = redisTemplate.opsForHash();
         List<Connection> connections = getConnections(connection.getReceiverId());
         for (Connection connection1: connections){

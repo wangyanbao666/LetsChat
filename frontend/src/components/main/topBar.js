@@ -60,8 +60,8 @@ export default function TopBar(){
     return (
         <div className="top-bar" ref={topBarRef}>
             <button onClick={goToLogin}>Login</button>
-            <button onClick={addConnectionPopUp}>Add Connection</button>
-            <button onClick={handleConnectionPopUp}>Handle Connection</button>
+            {/* <button onClick={addConnectionPopUp}>Add Connection</button>
+            <button onClick={handleConnectionPopUp}>Handle Connection</button> */}
             {showAddConnectionPopUp && <AddConnectionPopUp ref={addConnectionPopUpRef}></AddConnectionPopUp>}
             {showHandleConnectionPopUp && <HandleConnectionPopUp ref={handleConnectionPopUpRef}></HandleConnectionPopUp>}
             {isLoggedIn && <button onClick={addConnectionPopUp}>Add Connection</button>}

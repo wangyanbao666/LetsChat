@@ -8,9 +8,14 @@ const HandleConnectionPopUp = forwardRef(({props}, ref) => {
     const {connectionRequest} = useContext(DataContext);
     return (
         <div className="handle-connection-popup" ref={ref}>
-            {connectionRequest.map(invitation => {
-               return <ConnectionRequestCard invitation={invitation} key={invitation.senderId}></ConnectionRequestCard>
-            })}
+            <h4 className="title">
+                New Invitations
+            </h4>
+            <div className="scrollable-invitation-area">
+                {connectionRequest.map(invitation => {
+                return <ConnectionRequestCard invitation={invitation} key={invitation.senderId}></ConnectionRequestCard>
+                })}
+            </div>
         </div>
     )
 })
