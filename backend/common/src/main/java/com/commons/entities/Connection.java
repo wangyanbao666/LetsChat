@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Connection implements Serializable {
     @Serial
     private static final long serialVersionUID = 123456789L;
+    private String uuid;
     private String senderName;
     private long senderId;
     private String receiverName;

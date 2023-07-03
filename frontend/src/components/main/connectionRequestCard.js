@@ -24,7 +24,7 @@ export default function ConnectionRequestCard(props){
                         const newFriends = [...previousFriends, newConnection];
                         return newFriends;
                     })
-                    updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id)
+                    updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id, true)
                     alert("Accepted");
                 }
                 else {
@@ -56,9 +56,10 @@ export default function ConnectionRequestCard(props){
     return (
         <div className="connection-request-card">
             <img src={imageLink} className="user-card-img"></img>
-            <div className="username">{invitation.senderName}</div>
-            {handled==0 && <button className="accept" onClick={accept}>accept</button>}
-            {handled==0 && <button className="refuse" onClick={reject}>reject</button>}
+            <div className="username">{invitation.senderName==userInfo.username ? invitation.receiverName : invitation.senderName}</div>
+            {handled==0 && invitation.senderId!=userInfo.id && <button className="accept" onClick={accept}>accept</button>}
+            {handled==0 && invitation.senderId!=userInfo.id && <button className="refuse" onClick={reject}>reject</button>}
+            {handled==0 && invitation.senderId==userInfo.id && <div className="display-text">Sent</div>}
             {handled==1 && <div className="display-text">Accepted</div>}
             {handled==2 && <div className="display-text">Rejected</div>}
             

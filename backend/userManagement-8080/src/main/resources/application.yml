@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: userManagement
+    name: user-management
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -53,6 +53,9 @@ eureka:
     service-url:
       defaultZone: http://localhost:8888/eureka/
 
+logging:
+  level:
+    feign: DEBUG
 
 connection:
   exchange-name: connection

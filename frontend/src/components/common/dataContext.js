@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { Stomp } from "@stomp/stompjs";
 import config from "../../config";
+import { checkUserExistance, updateConnection } from '../../utils/commonMethods';
 
 const DataContext = createContext();  
   
@@ -47,13 +48,15 @@ function DataProvider({ children }) {
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
 
 
-  const updateChatHistory = (id, content, self, senderId, receiverId) => {
+  const updateChatHistory = (id, content, self, senderId, receiverId, sendToServer) => {
     let message = {
       senderId: senderId,
       content: content,
       receiverId: receiverId,
   }
+  if (sendToServer){
     websocket.send("/app/chat", {}, JSON.stringify(message));
+  }
     setChatHistory(prevChatHistory => {
       let chatWithCurUser = prevChatHistory[id] || [];
       const newChat = [...chatWithCurUser, { content: content, self: self}];
@@ -84,8 +87,30 @@ function DataProvider({ children }) {
         let senderId = message.senderId;
         let receiverId = message.receiverId;
         let content = message.content;
-        updateChatHistory(senderId, content, false, senderId, receiverId);
+        updateChatHistory(senderId, content, false, senderId, receiverId, false);
       });
+      stompClient.subscribe(`/queue/${userId}/invitation`, function(data) {
+        let invitationString = data.body;
+        let invitation = JSON.parse(invitationString);
+        console.log(invitation)
+        setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
+      })
+      stompClient.subscribe(`/queue/${userId}/invitation/result`, function(data){
+        let invitationRequestString = data.body;
+        let invitationRequest = JSON.parse(invitationRequestString);
+        console.log(invitationRequest);
+        let invitation = invitationRequest.connection;
+        let user = invitationRequest.user;
+        setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
+        if (invitation.handled==1){
+          if (!checkUserExistance(friends, user)){
+            setFriends(previousFriend => {
+              return [user, ...previousFriend]
+            });
+          }
+
+        }
+      })
     });
     setWebsocket(stompClient);
   }
@@ -97,7 +122,6 @@ function DataProvider({ children }) {
     }
     
   }
-
 
 
   useEffect(() => {

@@ -87,6 +87,7 @@
 .handle-connection-popup .scrollable-invitation-area{
     overflow-y: scroll; /* Enable vertical scrolling */
     margin: 10px 20px 20px 20px;
+    height: 70%;
     background-color: #fced3f;
     border-radius: 3%;
 }

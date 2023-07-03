@@ -1,9 +1,7 @@
 package com.userManagement.services;
 
-import com.commons.entities.CommonResult;
-import com.commons.entities.Connection;
-import com.commons.entities.Message;
-import com.commons.entities.User;
+import com.commons.entities.*;
+import com.userManagement.clients.CommunicationClient;
 import com.userManagement.clients.MessageManagementClient;
 import com.userManagement.dao.UserDao;
 import jakarta.annotation.Resource;
@@ -22,6 +20,8 @@ public class UserService {
     private PublishConnectionRequestService publishConnectionRequestService;
     @Resource
     private MessageManagementClient messageManagementClient;
+
+
     public CommonResult<User> userRegister(User user){
         User userCheck = userDao.getUserByName(user.getUsername());
         CommonResult<User> result;
@@ -114,9 +114,7 @@ public class UserService {
 //        try {
             connection.setReceiverId(receiver.getId());
             publishConnectionRequestService.publishConnectionRequest(connection);
-//            if (!success){
-//                throw new Exception();
-//            }
+
             result.setCode(200);
             result.setMessage("You have sent the invitation!");
             return result;
@@ -135,16 +133,19 @@ public class UserService {
             result.setCode(200);
             result.setMessage("");
 //            update database if accept is true
+            User sender = userDao.getUserByName(connection.getSenderName());
+            User receiver = userDao.getUserByName(connection.getReceiverName());
             if (connection.getHandled() == 1){
-                User sender = userDao.getUserByName(connection.getSenderName());
-                User receiver = userDao.getUserByName(connection.getReceiverName());
-                sender.getConnections().add(receiver.getId());
-                receiver.getConnections().add(sender.getId());
-                userDao.updateUser(sender);
-                userDao.updateUser(receiver);
-                result.setData(sender);
+//                check whether they are connection with each other
+                if (!sender.getConnections().contains(receiver.getId())){
+                    sender.getConnections().add(receiver.getId());
+                    receiver.getConnections().add(sender.getId());
+                    userDao.updateUser(sender);
+                    userDao.updateUser(receiver);
+                    result.setData(sender);
+                }
             }
-            publishConnectionRequestService.handleConnectionRequest(connection);
+            publishConnectionRequestService.handleConnectionRequest(connection, receiver);
             return result;
         } catch (Exception e){
             result.setCode(401);

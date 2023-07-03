@@ -5,9 +5,14 @@ spring:
   application:
     name: websocket-communication
 
+
 eureka:
   instance:
     instance-id: websocket-communication
   client:
     service-url:
       defaultZone: http://localhost:8888/eureka/
+
+logging:
+  level:
+    feign: DEBUG

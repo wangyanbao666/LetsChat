@@ -88,7 +88,7 @@ export default function Login(){
 		setUserInfo(userInfo);
 		setFriends(processedConnections);
 		setChatHistory(processedHistory);
-		// console.log(invitations)
+		console.log(invitations)
 		if (invitations==null){
 			invitations = []
 		}
@@ -121,7 +121,7 @@ export default function Login(){
 				}
 			}
 		}
-
+		processedConnections.reverse();
 		// console.log(processedConnections)
 		// console.log(processedHistory)
 		return [processedConnections, processedHistory]
