@@ -19,7 +19,9 @@ export default function Login(){
 	const [loginVisibility, setLoginVisibility] = useState(false)
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
-	const {setUsername, setUserInfo, setChatHistory, setFriends, setConnectionRequest, history, websocket, setWebsocket} = useContext(DataContext)
+	const {setUsername, setUserInfo, setChatHistory, setFriends, 
+		setConnectionRequest, history, websocket, setWebsocket,
+		unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext)
 
 
     function handleSubmit(event){
@@ -41,9 +43,6 @@ export default function Login(){
 						changeRegister();
 					}
 				},
-				error: function(xhr, textStatus, errorThrown) {
-					// Handle error
-				}
 			});
 		}
 		else {
@@ -92,6 +91,13 @@ export default function Login(){
 		if (invitations==null){
 			invitations = []
 		}
+		let unHandledInvitationNum = 0;
+		invitations.forEach(invitation => {
+			if (invitation.handled==0 && invitation.senderId!=userInfo.id){
+				unHandledInvitationNum+=1;
+			}
+		})
+		setUnHandledConnectionNum(unHandledInvitationNum);
 		setConnectionRequest(invitations);
 	}
 

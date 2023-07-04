@@ -20,6 +20,7 @@ export default function UserCard(props){
                 <div className="username">{user.username}</div>
                 <div>{props.lastMessage}</div>
             </div>
+            <div className="new-message-indication">0</div>
         </div>
     )
 }

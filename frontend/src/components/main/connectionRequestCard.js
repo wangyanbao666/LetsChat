@@ -6,7 +6,7 @@ import { DataContext } from "../common/dataContext";
 export default function ConnectionRequestCard(props){
     const invitation = props.invitation;
     const [handled, setHandled] = useState(invitation.handled);
-    const {friends, setFriends, updateChatHistory, userInfo} = useContext(DataContext);
+    const {friends, setFriends, updateChatHistory, userInfo, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
     const imageLink = invitation.senderImageUrl==null ? "/imgs/selfie-place-holder.jpg" : invitation.senderImageUrl;
     
     function accept(){
@@ -25,6 +25,7 @@ export default function ConnectionRequestCard(props){
                         return newFriends;
                     })
                     updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id, true)
+                    setUnHandledConnectionNum(unHandledConnectionNum-1);
                     alert("Accepted");
                 }
                 else {
@@ -44,6 +45,7 @@ export default function ConnectionRequestCard(props){
             success: (result) => {
                 if (result.code == 200){
                     setHandled(2)
+                    setUnHandledConnectionNum(unHandledConnectionNum-1);
                     alert("Rejected");
                 }
                 else {

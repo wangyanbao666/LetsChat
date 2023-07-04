@@ -15,6 +15,7 @@ function DataProvider({ children }) {
   const [friends, setFriends] = useState([]);
   const [chatHistory, setChatHistory] = useState({});
   const [websocket, setWebsocket] = useState(null);
+  const [unHandledConnectionNum, setUnHandledConnectionNum] = useState(0);
   const [connectionRequest, setConnectionRequest] = useState([
     {
       senderName: "default",
@@ -93,6 +94,7 @@ function DataProvider({ children }) {
         let invitationString = data.body;
         let invitation = JSON.parse(invitationString);
         console.log(invitation)
+        setUnHandledConnectionNum(unHandledConnectionNum+1);
         setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
       })
       stompClient.subscribe(`/queue/${userId}/invitation/result`, function(data){
@@ -131,9 +133,9 @@ function DataProvider({ children }) {
 
   return (
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
-    userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
-    showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest}}>
-      {children}
+        userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
+        showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum}}>
+          {children}
     </DataContext.Provider>
   );
 }

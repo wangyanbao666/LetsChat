@@ -9,12 +9,40 @@
 
 }
 
+.top-bar .topbar-button {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-bar .topbar-button .new-invitation-indication {
+    position: absolute;
+    top: -8%;
+    left: 95%;
+    z-index: 100;
+    padding: 2px;
+    font-size: 12px;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
 .top-bar button {
+    position: relative;
+    z-index: 1;
     background-color: beige;
     height: 40px;
     font-size: large;
     font-weight: bold;
     border-radius: 5px;
     padding: 10px;
-    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

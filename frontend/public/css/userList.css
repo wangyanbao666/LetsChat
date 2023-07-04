@@ -11,19 +11,36 @@
     margin: 10px 10px 10px 10px;
 }
 
+
+
 .user-card {
+    position: relative;
     display: flex;
     border-radius: 6px;
     margin: 5px;
 }
 
+
 .user-card.selected {
     background-color:aquamarine;
 }
 
-/* .user-card .user-card-img {
-    width: 25%;
-} */
+.user-card .new-message-indication {
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    z-index: 100;
+    padding: 2px;
+    font-size: 14px;
+    width: 16px;
+    height: 16px;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight:600;
+}
 
 .user-card .text-region {
     width: 75%;

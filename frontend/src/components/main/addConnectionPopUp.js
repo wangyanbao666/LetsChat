@@ -21,6 +21,10 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
         if (inputRef.current.value !== ""){
             setShowAddConnectionPopUp(false);
             let receiverName = inputRef.current.value
+            if (receiverName == userInfo.username){
+                alert("You can't send invitation to yourself")
+                return;
+            }
             let invitation = {
                 "uuid": generateUuid(),
                 "senderName": userInfo.username,

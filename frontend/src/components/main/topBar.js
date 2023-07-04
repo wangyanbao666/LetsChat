@@ -8,7 +8,8 @@ import HandleConnectionPopUp from "./handleConnectionPopUp";
 export default function TopBar(){
     const navigate = useNavigate();
     const {isLoggedIn} = useContext(DataContext)
-    const {showAddConnectionPopUp, setShowAddConnectionPopUp, showHandleConnectionPopUp, setShowHandleConnectionPopUp} = useContext(DataContext);
+    const {showAddConnectionPopUp, setShowAddConnectionPopUp, showHandleConnectionPopUp, 
+        setShowHandleConnectionPopUp, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
     const screen = document.getElementsByClassName("main-content");
 
     function goToLogin(){
@@ -59,13 +60,27 @@ export default function TopBar(){
 
     return (
         <div className="top-bar" ref={topBarRef}>
-            <button onClick={goToLogin}>Login</button>
+            <div className="topbar-button"><button onClick={goToLogin}>Login</button></div>
             {/* <button onClick={addConnectionPopUp}>Add Connection</button>
             <button onClick={handleConnectionPopUp}>Handle Connection</button> */}
             {showAddConnectionPopUp && <AddConnectionPopUp ref={addConnectionPopUpRef}></AddConnectionPopUp>}
             {showHandleConnectionPopUp && <HandleConnectionPopUp ref={handleConnectionPopUpRef}></HandleConnectionPopUp>}
-            {isLoggedIn && <button onClick={addConnectionPopUp}>Add Connection</button>}
-            {isLoggedIn && <button onClick={handleConnectionPopUp}>Handle Connection</button>}
+            {isLoggedIn && 
+                <div className="topbar-button">
+                    <button onClick={addConnectionPopUp}>Add Connection</button>
+                </div>}
+            {isLoggedIn && 
+                <div className="topbar-button">
+                    <button onClick={handleConnectionPopUp}>Handle Connection
+                        {unHandledConnectionNum>0 && <div className="new-invitation-indication">{unHandledConnectionNum}</div>}
+                    </button>
+                   
+                </div>}
+
+                {/* <div className="topbar-button">
+                    <button onClick={handleConnectionPopUp}>Handle Connection</button>
+                    {unHandledConnectionNum>0 && <div className="new-invitation-indication">{unHandledConnectionNum}</div>}
+                </div> */}
         </div>
     )
 }
