@@ -38,6 +38,13 @@
         where receiver_id = #{id} or sender_id = #{id}
         order by id
     </select>
+    <select id="getMessageBySenderIdAndReceiverId" parameterType="long" resultType="com.commons.entities.Message">
+        select id, sender_id as senderId, receiver_id as receiverId, content,
+            datetime_column as datetime, flag
+        from message_t
+        where receiver_id = #{receiverId} and sender_id = #{senderId}
+        order by id
+    </select>
     <insert id="insertMessage" parameterType="com.commons.entities.Message">
         insert into message_t (id, sender_id, receiver_id, content, datetime_column, flag)
         values
@@ -53,6 +60,14 @@
         <foreach collection="messages" item="message">
             set flag=#{message.flag}, content=#{message.content}
             where id = #{message.id}
+        </foreach>
+    </update>
+    <update id="updateMessagesUnseen" parameterType="long">
+        update message_t
+        set flag = 1
+        where
+        <foreach collection="ids" item="id" separator="or">
+            id = #{id}
         </foreach>
     </update>
 

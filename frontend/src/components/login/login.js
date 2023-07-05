@@ -21,14 +21,13 @@ export default function Login(){
 
 	const {setUsername, setUserInfo, setChatHistory, setFriends, 
 		setConnectionRequest, history, websocket, setWebsocket,
-		unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext)
+		unHandledConnectionNum, setUnHandledConnectionNum, setNumOfUnseenMessage} = useContext(DataContext)
 
 
     function handleSubmit(event){
         event.preventDefault(); // 👈️ prevent page refresh
 		let emailValue = email.current.value
 		let passwordValue = password.current.value
-		console.log(emailValue, passwordValue)
 		if (isRegister){
 			$.ajax({
 				url: config.registerUrl,
@@ -57,8 +56,6 @@ export default function Login(){
 					alert(message);
 					if (statusCode == 200){
 						console.log(result.data)
-						// setUsername(emailValue)
-						// setHistory(userHistory)
 						let userId = result.data.user.id;
 						setIsLoggedIn(true);
 						loadUserData(result.data, userId);
@@ -80,13 +77,11 @@ export default function Login(){
 		let userInfo = data.user;
 		let history = data.chatHistory;
 		let invitations = data.invitations
-		console.log("loading data...")
-		// console.log(history)
-		// console.log(connections)
-		let [processedConnections, processedHistory] = preprocessChatHistory(connections, history, userId)
+		let [unseenCount, processedConnections, processedHistory] = preprocessChatHistory(connections, history, userId)
 		setUserInfo(userInfo);
 		setFriends(processedConnections);
 		setChatHistory(processedHistory);
+		setNumOfUnseenMessage(unseenCount);
 		console.log(invitations)
 		if (invitations==null){
 			invitations = []
@@ -104,14 +99,20 @@ export default function Login(){
 	function preprocessChatHistory(connections, history, userId){
 		let lastChat = [];
 		let processedHistory = {};
+		let unseenCount = {};
 		let keys = Object.keys(history);
 		for (let key of keys){
-			lastChat.push(history[key][history[key].length-1])
-			processedHistory[key] = []
+			lastChat.push(history[key][history[key].length-1]);
+			processedHistory[key] = [];
+			unseenCount[key] = 0;
 			history[key].forEach(element => {
 				let singleHistory = {}
 				singleHistory["self"] = element.senderId === userId;
 				singleHistory["content"] = element.content;
+				singleHistory["flag"] = element.flag;
+				if (element.flag === 0 && element.senderId !== userId){
+					unseenCount[key]+=1;
+				}
 				processedHistory[key].push(singleHistory) 
 			});
 		}
@@ -130,7 +131,7 @@ export default function Login(){
 		processedConnections.reverse();
 		// console.log(processedConnections)
 		// console.log(processedHistory)
-		return [processedConnections, processedHistory]
+		return [unseenCount, processedConnections, processedHistory]
 
 	}
 
@@ -146,7 +147,6 @@ export default function Login(){
 		}
 		else {
 			setIsRegister(true)
-			console.log(isRegister)
 			let button = document.getElementById("loginButton")
 			button.textContent = "Register"
 			setLoginVisibility(true)

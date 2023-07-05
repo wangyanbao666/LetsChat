@@ -12,8 +12,10 @@ public interface MessageDao {
     List<Message> getMessageBySenderId(@Param("id") long id);
     List<Message> getMessageByReceiverId(@Param("id") long id);
     List<Message> getMessageBySenderIdReceiverId(@Param("id") long id);
+    List<Message> getMessageBySenderIdAndReceiverId(@Param("receiverId") long receiverId, @Param("senderId") long senderId);
     void insertMessage(@Param("message") Message message);
     void updateMessage(@Param("message") Message message);
     void updateMessages(@Param("messages") List<Message> messages);
+    void updateMessagesUnseen(@Param("ids") List<Long> ids);
 
 }

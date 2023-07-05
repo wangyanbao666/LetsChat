@@ -47,7 +47,7 @@ function DataProvider({ children }) {
   ]);
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
-
+  const [numOfuUnseenMessage, setNumOfUnseenMessage] = useState({});
 
   const updateChatHistory = (id, content, self, senderId, receiverId, sendToServer) => {
     let message = {
@@ -68,10 +68,6 @@ function DataProvider({ children }) {
     });
   }
 
-  useEffect(() => {
-    console.log(chatHistory);
-  }, [chatHistory]);
-
 
   const setupWebsocketConnection = () => {
     const userId = userInfo.id;
@@ -81,7 +77,6 @@ function DataProvider({ children }) {
     let websocket = new WebSocket(config.websocketUrl);
     let stompClient = Stomp.over(websocket);
     stompClient.connect({}, function(frame) {
-      console.log('Connected: ' + frame);
       stompClient.subscribe(`/queue/${userId}/chat`, function(data) {
         let messageString = data.body;
         let message = JSON.parse(messageString);
@@ -89,6 +84,10 @@ function DataProvider({ children }) {
         let receiverId = message.receiverId;
         let content = message.content;
         updateChatHistory(senderId, content, false, senderId, receiverId, false);
+        setNumOfUnseenMessage(previousNumOfUnseenMessage => {
+          let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [senderId]: previousNumOfUnseenMessage[senderId]===undefined ? 1 : previousNumOfUnseenMessage[senderId]+1}
+          return newNumOfUnseenMessage;
+        })
       });
       stompClient.subscribe(`/queue/${userId}/invitation`, function(data) {
         let invitationString = data.body;
@@ -134,7 +133,8 @@ function DataProvider({ children }) {
   return (
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
         userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
-        showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum}}>
+        showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum,
+        numOfuUnseenMessage, setNumOfUnseenMessage}}>
           {children}
     </DataContext.Provider>
   );

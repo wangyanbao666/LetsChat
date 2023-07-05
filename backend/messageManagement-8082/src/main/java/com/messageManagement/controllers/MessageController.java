@@ -2,6 +2,7 @@ package com.messageManagement.controllers;
 
 import com.commons.entities.CommonResult;
 import com.commons.entities.Message;
+import com.messageManagement.pojo.SenderReceiverId;
 import com.messageManagement.services.MessageService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,5 +30,10 @@ public class MessageController {
     @PostMapping("message/update")
     public CommonResult updateMessage(@RequestBody List<Message> messages){
         return messageService.updateMessage(messages);
+    }
+
+    @PostMapping("message/update/seen")
+    public CommonResult updateMessageSeen(@RequestBody SenderReceiverId senderReceiverId){
+        return messageService.updateMessageSeen(senderReceiverId.getReceiverId(), senderReceiverId.getSenderId());
     }
 }

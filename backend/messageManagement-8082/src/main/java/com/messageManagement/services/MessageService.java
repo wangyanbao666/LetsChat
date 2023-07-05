@@ -65,4 +65,24 @@ public class MessageService {
             return new CommonResult(400, "failed to update the message.", null);
         }
     }
+
+    public CommonResult updateMessageSeen(long receiverId, long senderId){
+//        try {
+        System.out.println(receiverId+" "+senderId);
+            List<Message> messages = messageDao.getMessageBySenderIdAndReceiverId(receiverId, senderId);
+            List<Long> filtered = new ArrayList<>();
+            for (Message message: messages){
+                if (message.getFlag() == 0){
+                    filtered.add(message.getId());
+                }
+            }
+        System.out.println(messages);
+            if (messages.size()>0){
+                messageDao.updateMessagesUnseen(filtered);
+            }
+            return new CommonResult(200, "message updated successfully", null);
+//        } catch (Exception e){
+//            return new CommonResult(400, "failed to update the message.", null);
+//        }
+    }
 }
