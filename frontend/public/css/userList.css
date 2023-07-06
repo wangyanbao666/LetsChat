@@ -35,6 +35,7 @@
     width: 16px;
     height: 16px;
     background-color: red;
+    color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;

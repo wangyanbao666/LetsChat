@@ -53,14 +53,14 @@ public class RedisDao {
         HashOperations<String, String, List<Connection>> hashOps = redisTemplate.opsForHash();
         List<Connection> connections = getConnections(connection.getReceiverId());
         for (Connection connection1: connections){
-            if (Objects.equals(connection1.getUuid(), connection.getUuid())){
+            if (Objects.equals(connection1.getSenderId(), connection.getSenderId()) && Objects.equals(connection1.getReceiverId(), connection.getReceiverId())){
                 connection1.setHandled(connection.getHandled());
                 connection1.setDatetime(connection.getDatetime());
             }
         }
         List<Connection> connections2 = getConnections(connection.getSenderId());
         for (Connection connection1: connections2){
-            if (Objects.equals(connection1.getUuid(), connection.getUuid())){
+            if (Objects.equals(connection1.getSenderId(), connection.getSenderId()) && Objects.equals(connection1.getReceiverId(), connection.getReceiverId())){
                 connection1.setHandled(connection.getHandled());
                 connection1.setDatetime(connection.getDatetime());
             }

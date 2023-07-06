@@ -50,6 +50,7 @@ public class PublishConnectionRequestService {
                     if (connection1.getHandled()!=2){
                         return;
                     }
+                    System.out.println(connection);
                     redisDao.updateConnection(connection);
                     communicationClient.sendInvitation(connection);
                     return;

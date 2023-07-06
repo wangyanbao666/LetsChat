@@ -19,14 +19,15 @@
 
 .top-bar .topbar-button .new-invitation-indication {
     position: absolute;
-    top: -8%;
-    left: 95%;
+    top: -15%;
+    left: 94%;
     z-index: 100;
     padding: 2px;
     font-size: 12px;
     width: 15px;
     height: 15px;
     background-color: red;
+    color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;

@@ -14,27 +14,6 @@ export default function UserCard(props){
 
     
     const handleClick = () => {
-        if (unseenMessagesCount>0){
-            $.ajax({
-                url: config.updateMessageSeenUrl,
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    receiverId: userInfo.id,
-                    senderId: user.id,
-                }),
-                success: function(result){
-                    if (result.code==200){
-                        setNumOfUnseenMessage(previousNumOfUnseenMessage => {
-                            let id = user.id;
-                            let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [id]:0};
-                            console.log(newNumOfUnseenMessage);
-                            return newNumOfUnseenMessage;
-                        })
-                    }
-                }
-            })
-        }
         onClick(user.id);
         setSelectedUser(user);
       };

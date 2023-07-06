@@ -1,7 +1,8 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 import { Stomp } from "@stomp/stompjs";
 import config from "../../config";
 import { checkUserExistance, updateConnection } from '../../utils/commonMethods';
+import $ from 'jquery'
 
 const DataContext = createContext();  
   
@@ -49,6 +50,66 @@ function DataProvider({ children }) {
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
   const [numOfuUnseenMessage, setNumOfUnseenMessage] = useState({});
 
+  const selectedUserRef = useRef();
+  selectedUserRef.current = selectedUser;
+
+  const seeMessage = () => {
+    if (selectedUser===null){
+      return;
+    }
+    if (numOfuUnseenMessage[selectedUser.id]>0){
+      $.ajax({
+          url: config.updateMessageSeenUrl,
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+              receiverId: userInfo.id,
+              senderId: selectedUser.id,
+          }),
+          success: function(result){
+              if (result.code==200){
+                  setNumOfUnseenMessage(previousNumOfUnseenMessage => {
+                      let id = selectedUser.id;
+                      let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [id]:0};
+                      console.log(newNumOfUnseenMessage);
+                      return newNumOfUnseenMessage;
+                  })
+              }
+          }
+      })
+    }
+  }
+
+  const setUnseenMessage = (senderId) => {
+    let curUser = selectedUserRef.current;
+    console.log(curUser)
+    if (curUser===null || senderId!=curUser.id){
+      setNumOfUnseenMessage(previousNumOfUnseenMessage => {
+        let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [senderId]: previousNumOfUnseenMessage[senderId]===undefined ? 1 : previousNumOfUnseenMessage[senderId]+1}
+        return newNumOfUnseenMessage;
+      })
+    }
+    else {
+      $.ajax({
+        url: config.updateMessageSeenUrl,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            receiverId: userInfo.id,
+            senderId: curUser.id,
+        }),
+      })
+    }
+  }
+
+  useEffect(()=>{
+    seeMessage()
+  }, [selectedUser])
+
+  useEffect(() => {
+    console.log("unhandled num: "+unHandledConnectionNum)
+  }, [unHandledConnectionNum])
+
   const updateChatHistory = (id, content, self, senderId, receiverId, sendToServer) => {
     let message = {
       senderId: senderId,
@@ -84,10 +145,8 @@ function DataProvider({ children }) {
         let receiverId = message.receiverId;
         let content = message.content;
         updateChatHistory(senderId, content, false, senderId, receiverId, false);
-        setNumOfUnseenMessage(previousNumOfUnseenMessage => {
-          let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [senderId]: previousNumOfUnseenMessage[senderId]===undefined ? 1 : previousNumOfUnseenMessage[senderId]+1}
-          return newNumOfUnseenMessage;
-        })
+        setUnseenMessage(senderId)
+        
       });
       stompClient.subscribe(`/queue/${userId}/invitation`, function(data) {
         let invitationString = data.body;
@@ -109,7 +168,6 @@ function DataProvider({ children }) {
               return [user, ...previousFriend]
             });
           }
-
         }
       })
     });
