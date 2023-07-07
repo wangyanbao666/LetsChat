@@ -21,7 +21,7 @@ export default function ConnectionRequestCard(props){
                     setHandled(1)
                     let newConnection = result.data
                     setFriends((previousFriends) => {
-                        const newFriends = [...previousFriends, newConnection];
+                        const newFriends = [newConnection, ...previousFriends];
                         return newFriends;
                     })
                     updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id, true)

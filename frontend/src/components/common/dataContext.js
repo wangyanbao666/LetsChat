@@ -82,7 +82,6 @@ function DataProvider({ children }) {
 
   const setUnseenMessage = (senderId) => {
     let curUser = selectedUserRef.current;
-    console.log(curUser)
     if (curUser===null || senderId!=curUser.id){
       setNumOfUnseenMessage(previousNumOfUnseenMessage => {
         let newNumOfUnseenMessage = {...previousNumOfUnseenMessage, [senderId]: previousNumOfUnseenMessage[senderId]===undefined ? 1 : previousNumOfUnseenMessage[senderId]+1}
@@ -115,10 +114,43 @@ function DataProvider({ children }) {
       senderId: senderId,
       content: content,
       receiverId: receiverId,
-  }
-  if (sendToServer){
-    websocket.send("/app/chat", {}, JSON.stringify(message));
-  }
+    }
+    if (sendToServer){
+      websocket.send("/app/chat", {}, JSON.stringify(message));
+    }
+
+    let friendId;
+    if (self){
+      friendId = receiverId;
+    }
+    else {
+      friendId = senderId;
+    }
+
+    setFriends(previousFriendsOrigin => {
+      let previousFriends = [...previousFriendsOrigin]
+      let friend = null;
+      for (let i = 0; i < previousFriends.length; i++) {
+        let f = previousFriends[i];
+        if (f.id === friendId) {
+          if (i==0){
+            return previousFriends;
+          }
+          let friendList = previousFriends.splice(i, 1);
+          friend = friendList[0];
+          break;
+        }
+      }
+      let newFriends;
+      if (friend !== null) {
+        newFriends = [friend, ...previousFriends];
+      } else {
+        newFriends = previousFriends;
+      }
+      console.log(newFriends)
+      return newFriends;
+    })
+
     setChatHistory(prevChatHistory => {
       let chatWithCurUser = prevChatHistory[id] || [];
       const newChat = [...chatWithCurUser, { content: content, self: self}];
