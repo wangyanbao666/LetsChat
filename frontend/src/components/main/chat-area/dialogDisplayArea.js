@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import DialogBox from "./dialogBox";
-import { DataContext } from "../common/dataContext";
+import { DataContext } from "../../common/dataContext";
 
 export default function DialogDisplayArea(){
     const {selectedUser, chatHistory} = useContext(DataContext);

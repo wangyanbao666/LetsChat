@@ -14,38 +14,11 @@ function DataProvider({ children }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [userInfo, setUserInfo] = useState({});
   const [friends, setFriends] = useState([]);
+  const [friendsForChat, setFriendsForChat] = useState([]);
   const [chatHistory, setChatHistory] = useState({});
   const [websocket, setWebsocket] = useState(null);
   const [unHandledConnectionNum, setUnHandledConnectionNum] = useState(0);
-  const [connectionRequest, setConnectionRequest] = useState([
-    {
-      senderName: "default",
-      handled: 0,
-  },
-    {
-      senderName: "default1",
-      handled: 1,
-  },
-    {
-      senderName: "default2",
-      handled: 2,
-  }
-  ,
-    {
-      senderName: "default2",
-      handled: 2,
-  }
-  ,
-    {
-      senderName: "default2",
-      handled: 2,
-  }
-  ,
-    {
-      senderName: "default2",
-      handled: 2,
-  }
-  ]);
+  const [connectionRequest, setConnectionRequest] = useState([]);
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
   const [numOfuUnseenMessage, setNumOfUnseenMessage] = useState({});
@@ -127,7 +100,7 @@ function DataProvider({ children }) {
       friendId = senderId;
     }
 
-    setFriends(previousFriendsOrigin => {
+    setFriendsForChat(previousFriendsOrigin => {
       let previousFriends = [...previousFriendsOrigin]
       let friend = null;
       for (let i = 0; i < previousFriends.length; i++) {
@@ -147,7 +120,6 @@ function DataProvider({ children }) {
       } else {
         newFriends = previousFriends;
       }
-      console.log(newFriends)
       return newFriends;
     })
 
@@ -224,7 +196,7 @@ function DataProvider({ children }) {
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
         userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
         showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum,
-        numOfuUnseenMessage, setNumOfUnseenMessage}}>
+        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat}}>
           {children}
     </DataContext.Provider>
   );

@@ -2,10 +2,9 @@
 // send request to backend to get user information, friends information and chat history
 
 import { useContext, useEffect } from "react";
-import DialogArea from "./dialogArea";
-import DialogBox from "./dialogBox";
+import DialogArea from "./chat-area/dialogArea";
 import TopBar from "./topBar";
-import UserList from "./userList";
+import LeftSideBar from "./left-side/leftSideBar";
 import { DataContext } from "../common/dataContext";
 
 export default function Screen(){
@@ -37,7 +36,7 @@ export default function Screen(){
         <div className="screen">
             <TopBar></TopBar>
             <div className="main-content">
-                <UserList></UserList>
+                <LeftSideBar></LeftSideBar>
                 <DialogArea></DialogArea>
             </div>
         </div>

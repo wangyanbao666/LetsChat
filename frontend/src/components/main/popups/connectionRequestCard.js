@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import $ from "jquery";
-import config from "../../config";
-import { DataContext } from "../common/dataContext";
+import config from "../../../config";
+import { DataContext } from "../../common/dataContext";
 
 export default function ConnectionRequestCard(props){
     const invitation = props.invitation;
     const [handled, setHandled] = useState(invitation.handled);
-    const {friends, setFriends, updateChatHistory, userInfo, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
+    const {setFriends, updateChatHistory, userInfo, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
     const imageLink = invitation.senderImageUrl==null ? "/imgs/selfie-place-holder.jpg" : invitation.senderImageUrl;
     
     function accept(){

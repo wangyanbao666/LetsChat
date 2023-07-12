@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../common/dataContext";
-import AddConnectionPopUp from "./addConnectionPopUp";
-import HandleConnectionPopUp from "./handleConnectionPopUp";
+import AddConnectionPopUp from "./popups/addConnectionPopUp";
+import HandleConnectionPopUp from "./popups/handleConnectionPopUp";
 
 
 export default function TopBar(){

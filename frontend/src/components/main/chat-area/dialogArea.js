@@ -2,7 +2,7 @@
 
 import DialogDisplayArea from "./dialogDisplayArea";
 import InputBar from "./inputBar.js"
-import { DataContext } from "../common/dataContext";
+import { DataContext } from "../../common/dataContext";
 import { useContext, useState } from "react"
 import UserStatusBar from "./userStatusBar";
 

@@ -47,7 +47,7 @@ public class PublishConnectionRequestService {
             for (Connection connection1: connections){
                 log.info(connection1.toString());
                 if (Objects.equals(connection1.getSenderName(), connection.getSenderName())){
-                    if (connection1.getHandled()!=2){
+                    if (connection1.getHandled()==0){
                         return;
                     }
                     System.out.println(connection);

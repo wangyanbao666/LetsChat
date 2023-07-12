@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { DataContext } from "../common/dataContext";
+import { DataContext } from "../../common/dataContext";
 import { useState } from "react";
 
 export default function UserStatusBar(){

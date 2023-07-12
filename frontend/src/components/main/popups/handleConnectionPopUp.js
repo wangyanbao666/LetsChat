@@ -2,7 +2,7 @@
 
 import { forwardRef, useContext } from "react";
 import ConnectionRequestCard from "./connectionRequestCard";
-import { DataContext } from "../common/dataContext";
+import { DataContext } from "../../common/dataContext";
 
 const HandleConnectionPopUp = forwardRef(({props}, ref) => {
     const {connectionRequest} = useContext(DataContext);

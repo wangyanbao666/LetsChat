@@ -1,10 +1,10 @@
 import { forwardRef, useContext, useRef } from "react"
-import { DataContext } from "../common/dataContext"
-import TopBar from "./topBar"
-import config from "../../config"
+import { DataContext } from "../../common/dataContext"
+import TopBar from "../topBar"
+import config from "../../../config"
 import $ from "jquery"
-import generateUuid from "../../utils/generateUuid"
-import { updateConnection } from "../../utils/commonMethods"
+import generateUuid from "../../../utils/generateUuid"
+import { updateConnection } from "../../../utils/commonMethods"
 
 
 const AddConnectionPopUp = forwardRef(({props},ref) =>{

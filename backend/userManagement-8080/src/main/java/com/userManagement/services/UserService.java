@@ -153,4 +153,16 @@ public class UserService {
         }
 
     }
+
+    public CommonResult deleteConnection(User user1, User user2){
+        CommonResult result = new CommonResult<>();
+        User user1Check = userDao.getUserById(user1.getId());
+        User user2Check = userDao.getUserById(user2.getId());
+        user1Check.getConnections().remove(user2Check.getId());
+        user2Check.getConnections().remove(user1Check.getId());
+        userDao.updateUser(user1Check);
+        userDao.updateUser(user2Check);
+        result.setCode(200);
+        return result;
+    }
 }

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useContext } from "react";
-import { DataContext } from "../common/dataContext";
+import { DataContext } from "../../common/dataContext";
 
 
 // text bar + a send button

@@ -2,6 +2,7 @@ package com.userManagement.controllers;
 
 import com.commons.entities.CommonResult;
 import com.commons.entities.Connection;
+import com.commons.entities.ConnectionPair;
 import com.commons.entities.User;
 import com.userManagement.services.UserService;
 import jakarta.annotation.Resource;
@@ -47,5 +48,12 @@ public class UserController {
     @PostMapping("user/connection/handle")
     public CommonResult addConnectionHandler(@RequestBody Connection connection){
         return userService.handleInvitation(connection);
+    }
+
+    @PostMapping("user/connection/delete")
+    public CommonResult deleteConnection(@RequestBody ConnectionPair connectionPair){
+        User user1 = connectionPair.getUser1();
+        User user2 = connectionPair.getUser2();
+        return userService.deleteConnection(user1, user2);
     }
 }

@@ -18,4 +18,5 @@ public interface UserDao {
 
 //    may be replaced with more specific conditions
     void updateUser(@Param("user") User user);
+    void updateUserConnection(@Param("username") String username, @Param("connections") List<Long> connections);
 }

@@ -2,7 +2,7 @@ import $ from "jquery"
 import { useContext, useEffect, useRef, useState } from "react";
 import { DataContext } from "../common/dataContext";
 import { useNavigate } from "react-router-dom";
-import { compareByDatetime } from "../../utils/compareMethods";
+import { compareByDatetime, compareByName } from "../../utils/compareMethods";
 import config from "../../config";
 
 export default function Login(){
@@ -19,7 +19,7 @@ export default function Login(){
 	const [loginVisibility, setLoginVisibility] = useState(false)
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
-	const {setUsername, setUserInfo, setChatHistory, setFriends, 
+	const {setUsername, setUserInfo, setChatHistory, setFriends, setFriendsForChat,
 		setConnectionRequest, history, websocket, setWebsocket,
 		unHandledConnectionNum, setUnHandledConnectionNum, setNumOfUnseenMessage} = useContext(DataContext)
 
@@ -76,12 +76,13 @@ export default function Login(){
 		let connections = data.connections;
 		let userInfo = data.user;
 		let history = data.chatHistory;
-		let invitations = data.invitations
-		let [unseenCount, processedConnections, processedHistory] = preprocessChatHistory(connections, history, userId)
+		let invitations = data.invitations;
+		let processedResult = preprocessChatHistory(connections, history, userId);
 		setUserInfo(userInfo);
-		setFriends(processedConnections);
-		setChatHistory(processedHistory);
-		setNumOfUnseenMessage(unseenCount);
+		setFriends(processedResult.connections);
+		setFriendsForChat(processedResult.processedConnectionsForChat);
+		setChatHistory(processedResult.processedHistory);
+		setNumOfUnseenMessage(processedResult.unseenCount);
 		console.log(invitations)
 		if (invitations==null){
 			invitations = []
@@ -118,21 +119,22 @@ export default function Login(){
 		}
 		lastChat.sort(compareByDatetime)
 
-		let processedConnections = []
+		let processedConnectionsForChat = []
 		for (let item of lastChat){
 			let id = item.senderId === userId ? item.receiverId : item.senderId;
 			for (let connection of connections){
 				if (connection.id === id){
-					processedConnections.push(connection)
+					processedConnectionsForChat.push(connection)
 					break;
 				}
 			}
 		}
-		processedConnections.reverse();
+		processedConnectionsForChat.reverse();
+		connections.sort((a, b) => compareByName(a.username, b.username))
 		// console.log(processedConnections)
 		// console.log(processedHistory)
-		return [unseenCount, processedConnections, processedHistory]
-
+		return {"unseenCount": unseenCount, "processedConnectionsForChat": processedConnectionsForChat, 
+		"processedHistory": processedHistory, "connections": connections}
 	}
 
 
