@@ -10,6 +10,7 @@ export default function UserCard(props){
     const user = props.user;
     const onClick = props.onClick;
     const inChat = props.inChat;
+    console.log(props.lastMessage)
     const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
     const [unseenMessagesCount, setUnseenMessagesCount] = useState(numOfuUnseenMessage[user.id]);
     const [expanded, setExpanded] = useState(false);
@@ -80,7 +81,7 @@ export default function UserCard(props){
             <img src={imageLink} className="user-card-img"></img>
             <div className="text-region" onClick={handleClick}>
                 <div className="username">{user.username}</div>
-                <div>{props.lastMessage}</div>
+                <div className="lastmessage">{props.lastMessage}</div>
             </div>
             {inChat && unseenMessagesCount>0 && <div className="new-message-indication">{unseenMessagesCount}</div>}
             {!inChat && !expanded && <div className="expand" onClick={expand}>

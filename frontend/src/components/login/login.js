@@ -112,6 +112,7 @@ export default function Login(){
 				singleHistory["content"] = element.content;
 				singleHistory["flag"] = element.flag;
 				singleHistory["success"] = true
+				singleHistory["datetime"] = element.datetime
 				if (element.flag === 0 && element.senderId !== userId){
 					unseenCount[key]+=1;
 				}

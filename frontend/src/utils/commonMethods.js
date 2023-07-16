@@ -21,3 +21,7 @@ export function updateConnection(previousConnectionRequest, invitation){
 export function getTime(){
     return new Date().toJSON();
 }
+
+export function getUserTimeZone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}

@@ -21,18 +21,13 @@ export default function InputBar(){
         if (text === ""){
             return;
         }
-        if (websocket!==null){
-            let message = {
-                senderId: userInfo.id,
-                receiverId: selectedUser.id,
-                content: text,
-            }
-            updateChatHistory(message);
-            messageBoxRef.current.value="";
+        let message = {
+            senderId: userInfo.id,
+            receiverId: selectedUser.id,
+            content: text,
         }
-        else {
-            alert("you are not connected to the server, please login again")
-        }
+        updateChatHistory(message);
+        messageBoxRef.current.value="";
     }   
 
     return (

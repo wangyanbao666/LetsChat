@@ -20,7 +20,7 @@ export default function DialogDisplayArea(){
 
     return (
         <div className="dialog-display-area" ref={displayAreaRef}>
-            {chatWithCurUser.map(chat => <DialogBox text={chat.content} self={chat.self} success={chat.success}></DialogBox>)}
+            {chatWithCurUser.map(chat => <DialogBox text={chat.content} datetime={chat.datetime} self={chat.self} success={chat.success}></DialogBox>)}
         </div>
     )
 }

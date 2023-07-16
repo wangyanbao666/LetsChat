@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../common/dataContext";
 import AddConnectionPopUp from "./popups/addConnectionPopUp";
@@ -18,6 +18,7 @@ export default function TopBar(){
     function addConnectionPopUp(){
         // console.log("add connection...")
         if (!showAddConnectionPopUp && !showHandleConnectionPopUp){
+            expandAreaRef.current.style.maxHeight = 0
             setShowAddConnectionPopUp(true);
         }
     }
@@ -31,9 +32,11 @@ export default function TopBar(){
     const addConnectionPopUpRef = useRef(null);
     const handleConnectionPopUpRef = useRef(null);
     const topBarRef = useRef(null);
+    const expandAreaRef = useRef(null);
 
     useEffect(() => {
         if (showAddConnectionPopUp || showHandleConnectionPopUp){
+            expandAreaRef.current.style.maxHeight = 0
             screen[0].style.opacity = "0.3";
         }
         else {
@@ -51,6 +54,10 @@ export default function TopBar(){
             if (handleConnectionPopUpRef.current && !handleConnectionPopUpRef.current.contains(event.target) && !topBarRef.current.contains(event.target)){
                 setShowHandleConnectionPopUp(false);
             }
+
+            if (expandAreaRef.current && !expandAreaRef.current.contains(event.target)){
+                expandAreaRef.current.style.maxHeight = 0
+            }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -58,29 +65,36 @@ export default function TopBar(){
         };
       }, []);
 
+    const expand = (() => {
+        expandAreaRef.current.style.maxHeight = "500px"
+    })
+
     return (
         <div className="top-bar" ref={topBarRef}>
-            <div className="topbar-button"><button onClick={goToLogin}>Login</button></div>
-            {/* <button onClick={addConnectionPopUp}>Add Connection</button>
-            <button onClick={handleConnectionPopUp}>Handle Connection</button> */}
+            <div className="menu-icon" onClick={expand}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <div className="expand-area" ref={expandAreaRef}>
+                        <ul>
+                            <li>
+                                <div onClick={addConnectionPopUp}>Add Connection</div>
+                            </li>
+                            <li>
+                                <div onClick={handleConnectionPopUp}>Handle Connection
+                                    {unHandledConnectionNum>0 && <div className="new-invitation-indication">{unHandledConnectionNum}</div>}
+                                </div>
+                            </li>
+                        </ul>
+                        
+                    </div>
+            </div>
             {showAddConnectionPopUp && <AddConnectionPopUp ref={addConnectionPopUpRef}></AddConnectionPopUp>}
             {showHandleConnectionPopUp && <HandleConnectionPopUp ref={handleConnectionPopUpRef}></HandleConnectionPopUp>}
-            {isLoggedIn && 
-                <div className="topbar-button">
-                    <button onClick={addConnectionPopUp}>Add Connection</button>
-                </div>}
-            {isLoggedIn && 
-                <div className="topbar-button">
-                    <button onClick={handleConnectionPopUp}>Handle Connection
-                        {unHandledConnectionNum>0 && <div className="new-invitation-indication">{unHandledConnectionNum}</div>}
-                    </button>
-                   
-                </div>}
+            
+            {/* <div className="topbar-button"><button onClick={goToLogin}>Login</button></div> */}
 
-                {/* <div className="topbar-button">
-                    <button onClick={handleConnectionPopUp}>Handle Connection</button>
-                    {unHandledConnectionNum>0 && <div className="new-invitation-indication">{unHandledConnectionNum}</div>}
-                </div> */}
+            
         </div>
     )
 }

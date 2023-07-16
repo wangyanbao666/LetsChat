@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useRef } from 'react';
 import { Stomp } from "@stomp/stompjs";
 import config from "../../config";
-import { checkUserExistance, updateConnection } from '../../utils/commonMethods';
+import { checkUserExistance, getUserTimeZone, updateConnection } from '../../utils/commonMethods';
 import $ from 'jquery'
 import { compareByName } from '../../utils/compareMethods';
 
@@ -23,6 +23,7 @@ function DataProvider({ children }) {
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
   const [numOfuUnseenMessage, setNumOfUnseenMessage] = useState({});
+  const [timeZone] = useState(getUserTimeZone())
 
   const selectedUserRef = useRef();
   selectedUserRef.current = selectedUser;
@@ -96,7 +97,7 @@ function DataProvider({ children }) {
     const chatHandler = function(data) {
       let messageString = data.body;
       let message = JSON.parse(messageString);
-
+      console.log(message)
       updateLocalChatHistory(false, message, true);
       setUnseenMessage(message.senderId)
     }
@@ -106,6 +107,7 @@ function DataProvider({ children }) {
       let commonResult = JSON.parse(commonResultString);
       let code = commonResult.code;
       let message = commonResult.data;
+      console.log(message)
       updateLocalChatHistory(true, message, code===200)
     }
 
@@ -154,7 +156,7 @@ function DataProvider({ children }) {
   const updateLocalChatHistory = (self, message, success) => {
     let receiverId = message.receiverId;
     let senderId = message.senderId;
-    let time = message.datetime;
+    let datetime = message.datetime;
     let content = message.content
     let friendId;
     if (self){
@@ -164,7 +166,6 @@ function DataProvider({ children }) {
       friendId = senderId;
     }
     let friend = null;
-    console.log(friends)
     for (let f of friends){
       if (f.id == friendId){
         friend = f;
@@ -197,7 +198,7 @@ function DataProvider({ children }) {
 
     setChatHistory(prevChatHistory => {
       let chatWithCurUser = prevChatHistory[friendId] || [];
-      const newChat = [...chatWithCurUser, { content: content, time: time, self: self, success: success}];
+      const newChat = [...chatWithCurUser, { content: content, datetime: datetime, self: self, success: success}];
       return {
         ...prevChatHistory,
         [friendId]: newChat,
@@ -236,7 +237,7 @@ function DataProvider({ children }) {
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
         userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
         showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum,
-        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat}}>
+        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat, timeZone}}>
           {children}
     </DataContext.Provider>
   );

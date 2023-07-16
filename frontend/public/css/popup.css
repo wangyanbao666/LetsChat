@@ -1,11 +1,13 @@
 .add-connection-popup {
     z-index: 100;
-    margin: 200px;
     padding: 20px;
     background-color: beige;
     border-radius: 5px;
     width: 50%;
-    position: absolute;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     transition: all 5s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -26,13 +28,15 @@
 }
 
 .handle-connection-popup {
-    margin: 100px;
     z-index: 100;
     background-color: beige;
     border-radius: 8px;
     width: 50%;
     height: 70vh;
-    position: absolute;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     transition: all 5s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -46,7 +50,7 @@
     display: flex;
     align-items: center; 
     border-radius: 7px;
-        text-align: center;
+    text-align: center;
 }
 
 .handle-connection-popup .connection-request-card .username {

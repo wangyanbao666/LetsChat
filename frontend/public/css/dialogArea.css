@@ -3,7 +3,7 @@
     position: relative;
     max-width: 500px;
     height: auto;
-    margin: 5px;
+    margin: 1px;
     margin-left: 40px;
     margin-right: 40px;
     line-height: 18px;
@@ -14,13 +14,18 @@
 .dialog-box2-text {
     border-bottom-color: skyblue;
     font-size: 15px;
-    padding: 5px 12px 5px 12px;
     box-sizing: border-box;
     border-radius: 6px;
     position: relative;
     word-break:keep-all;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    display: flex;
     /* padding: 10px; */
+}
+
+.msg-content {
+    padding: 5px 12px 5px 12px;
 }
 
 
@@ -28,10 +33,10 @@
     content: '';
     position: absolute;
     top: 50%;
-    left: -4px;
+    left: -3.5px;
     width: 9px;
     height: 10px;
-    margin-top: -9px;
+    /* margin-top: -9px; */
     background: inherit;
     transform: rotate(45deg);
 }
@@ -40,10 +45,10 @@
     content: '';
     position: absolute;
     top: 50%;
-    right: -4px;
+    right: -3px;
     width: 9px;
     height: 10px;
-    margin-top: -9px;
+    /* margin-top: -9px; */
     background: inherit;
     transform: rotate(45deg);
 }
@@ -122,4 +127,10 @@ transition: transform 0.3s; /* Apply transition to the transform property */
     justify-content: center;
     align-items: center;
     font-weight:600;
+}
+
+.msg-time {
+    align-self: self-end;
+    margin-right: 8px;
+    font-size: 10px;
 }

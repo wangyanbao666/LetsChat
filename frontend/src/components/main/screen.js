@@ -6,32 +6,9 @@ import DialogArea from "./chat-area/dialogArea";
 import TopBar from "./topBar";
 import LeftSideBar from "./left-side/leftSideBar";
 import { DataContext } from "../common/dataContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Screen(){
-    // const {userInfo, setUserInfo} = useContext(DataContext);
-    // const {friends, setFriends} = useContext(DataContext);
-    // const {chatHistory, setChatHistory} = useContext(DataContext);
-
-    // useEffect(() => {
-    //     // setFriends([
-    //     //     {"id": 1, "username": "wyb", "image": null, "status": "online"},
-    //     //     {"id": 2, "username": "abc", "image": null, "status": "offline"}
-    //     // ]);
-
-    //     // const chatHistoryData = {
-    //     //     "1": [
-    //     //         {"text": "hello", "self": false},
-    //     //         {"text": "nice to meet you", "self": true}
-    //     //     ],
-    //     //     "2": [
-    //     //         {"text": "nice to meet you", "self": false},
-    //     //         {"text": "hello", "self": true}
-    //     //     ],
-    //     // };
-    //     // setChatHistory(chatHistoryData);
-    // }, []);
-
-
     return (
         <div className="screen">
             <TopBar></TopBar>
