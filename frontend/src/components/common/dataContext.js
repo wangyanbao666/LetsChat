@@ -3,6 +3,7 @@ import { Stomp } from "@stomp/stompjs";
 import config from "../../config";
 import { checkUserExistance, updateConnection } from '../../utils/commonMethods';
 import $ from 'jquery'
+import { compareByName } from '../../utils/compareMethods';
 
 const DataContext = createContext();  
   
@@ -82,16 +83,79 @@ function DataProvider({ children }) {
     console.log("unhandled num: "+unHandledConnectionNum)
   }, [unHandledConnectionNum])
 
-  const updateChatHistory = (id, content, self, senderId, receiverId, sendToServer) => {
-    let message = {
-      senderId: senderId,
-      content: content,
-      receiverId: receiverId,
+  useEffect(() => {
+    console.log("friends: "+friends)
+  }, [friends])
+
+  useEffect(() => {
+    if (websocket==null){
+      return;
     }
-    if (sendToServer){
-      websocket.send("/app/chat", {}, JSON.stringify(message));
+    const subscriptions = []; // Maintain a list of subscriptions
+    const userId = userInfo.id;
+    const chatHandler = function(data) {
+      let messageString = data.body;
+      let message = JSON.parse(messageString);
+
+      updateLocalChatHistory(false, message, true);
+      setUnseenMessage(message.senderId)
     }
 
+    const chatConfirmHandler = function(data) {
+      let commonResultString = data.body;
+      let commonResult = JSON.parse(commonResultString);
+      let code = commonResult.code;
+      let message = commonResult.data;
+      updateLocalChatHistory(true, message, code===200)
+    }
+
+    const invitationHandler = function(data) {
+      let invitationString = data.body;
+      let invitation = JSON.parse(invitationString);
+      setUnHandledConnectionNum(unHandledConnectionNum+1);
+      setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
+    }
+
+    const invitationAcceptHandler = function(data){
+      let invitationRequestString = data.body;
+      let invitationRequest = JSON.parse(invitationRequestString);
+      let invitation = invitationRequest.connection;
+      let user = invitationRequest.user;
+      setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
+      if (invitation.handled==1){
+        if (!checkUserExistance(friends, user)){
+          setFriends(previousFriends => {
+            let newFriends = [user, ...previousFriends];
+            newFriends.sort((a, b) => compareByName(a.username, b.username));
+            return newFriends;
+          });
+        }
+      }
+    }
+    
+    const subscribeChat = websocket.subscribe(`/queue/${userId}/chat`, chatHandler);
+    const subscribeChatConfirm = websocket.subscribe(`/queue/${userId}/chat/confirm`, chatConfirmHandler);
+    const subscribeInvitation = websocket.subscribe(`/queue/${userId}/invitation`, invitationHandler)
+    const subscribeInvitationHandle = websocket.subscribe(`/queue/${userId}/invitation/result`, invitationAcceptHandler)
+
+    return () => {
+      subscribeChat.unsubscribe();
+      subscribeChatConfirm.unsubscribe();
+      subscribeInvitation.unsubscribe();
+      subscribeInvitationHandle.unsubscribe();
+    };
+  }, [websocket, friends])
+
+  const updateChatHistory = ( message) => {
+      websocket.send("/app/chat", {}, JSON.stringify(message));
+  }
+
+
+  const updateLocalChatHistory = (self, message, success) => {
+    let receiverId = message.receiverId;
+    let senderId = message.senderId;
+    let time = message.datetime;
+    let content = message.content
     let friendId;
     if (self){
       friendId = receiverId;
@@ -99,36 +163,44 @@ function DataProvider({ children }) {
     else {
       friendId = senderId;
     }
-
+    let friend = null;
+    console.log(friends)
+    for (let f of friends){
+      if (f.id == friendId){
+        friend = f;
+        break;
+      }
+    }
     setFriendsForChat(previousFriendsOrigin => {
       let previousFriends = [...previousFriendsOrigin]
-      let friend = null;
       for (let i = 0; i < previousFriends.length; i++) {
         let f = previousFriends[i];
         if (f.id === friendId) {
           if (i==0){
             return previousFriends;
           }
-          let friendList = previousFriends.splice(i, 1);
-          friend = friendList[0];
+          previousFriends.splice(i, 1);
           break;
         }
       }
+    
       let newFriends;
-      if (friend !== null) {
+      if (friend!=null){
+        console.log(friend)
         newFriends = [friend, ...previousFriends];
-      } else {
+      }
+      else {
         newFriends = previousFriends;
       }
       return newFriends;
     })
 
     setChatHistory(prevChatHistory => {
-      let chatWithCurUser = prevChatHistory[id] || [];
-      const newChat = [...chatWithCurUser, { content: content, self: self}];
+      let chatWithCurUser = prevChatHistory[friendId] || [];
+      const newChat = [...chatWithCurUser, { content: content, time: time, self: self, success: success}];
       return {
         ...prevChatHistory,
-        [id]: newChat,
+        [friendId]: newChat,
       };
     });
   }
@@ -142,40 +214,8 @@ function DataProvider({ children }) {
     let websocket = new WebSocket(config.websocketUrl);
     let stompClient = Stomp.over(websocket);
     stompClient.connect({}, function(frame) {
-      stompClient.subscribe(`/queue/${userId}/chat`, function(data) {
-        let messageString = data.body;
-        let message = JSON.parse(messageString);
-        let senderId = message.senderId;
-        let receiverId = message.receiverId;
-        let content = message.content;
-        updateChatHistory(senderId, content, false, senderId, receiverId, false);
-        setUnseenMessage(senderId)
-        
-      });
-      stompClient.subscribe(`/queue/${userId}/invitation`, function(data) {
-        let invitationString = data.body;
-        let invitation = JSON.parse(invitationString);
-        console.log(invitation)
-        setUnHandledConnectionNum(unHandledConnectionNum+1);
-        setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
-      })
-      stompClient.subscribe(`/queue/${userId}/invitation/result`, function(data){
-        let invitationRequestString = data.body;
-        let invitationRequest = JSON.parse(invitationRequestString);
-        console.log(invitationRequest);
-        let invitation = invitationRequest.connection;
-        let user = invitationRequest.user;
-        setConnectionRequest(previousConnectionRequest => updateConnection(previousConnectionRequest, invitation))
-        if (invitation.handled==1){
-          if (!checkUserExistance(friends, user)){
-            setFriends(previousFriend => {
-              return [user, ...previousFriend]
-            });
-          }
-        }
-      })
+      setWebsocket(stompClient);
     });
-    setWebsocket(stompClient);
   }
 
   const setupRabbitmqConnection = () => {

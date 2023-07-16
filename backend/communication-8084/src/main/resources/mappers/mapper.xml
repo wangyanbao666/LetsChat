@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.communication.dao.UserDao">
+    <resultMap id="userResultMap" type="com.commons.entities.User">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="email" column="email" />
+        <result property="groupIds" column="groupIds" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
+        <result property="connections" column="connections" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
+        <result property="lastOnline" column="lastOnline" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <select id="getUserById" parameterType="Long" resultMap="userResultMap">
+        select id, username, password, email, group_ids AS groupIds, connections,
+        last_online AS lastOnline, status
+        from user_t
+        where id=#{id}
+    </select>
+
+</mapper>

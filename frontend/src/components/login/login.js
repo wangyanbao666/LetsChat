@@ -111,6 +111,7 @@ export default function Login(){
 				singleHistory["self"] = element.senderId === userId;
 				singleHistory["content"] = element.content;
 				singleHistory["flag"] = element.flag;
+				singleHistory["success"] = true
 				if (element.flag === 0 && element.senderId !== userId){
 					unseenCount[key]+=1;
 				}

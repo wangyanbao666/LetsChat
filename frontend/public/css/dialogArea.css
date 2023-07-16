@@ -1,55 +1,66 @@
 .dialog-box1,
 .dialog-box2 {
-    max-width: 200px;
+    position: relative;
+    max-width: 500px;
     height: auto;
-    /* width: 200px;
-    height: 80px; */
-    margin: 10px;
+    margin: 5px;
     margin-left: 40px;
     margin-right: 40px;
-    /* background-color: skyblue; */
-    border-bottom-color: skyblue;
-    /* color: #fff; */
-    font-size: 12px;
     line-height: 18px;
+    transition: transform 0.3s; /* Apply transition to the transform property */
+}
+
+.dialog-box1-text,
+.dialog-box2-text {
+    border-bottom-color: skyblue;
+    font-size: 15px;
     padding: 5px 12px 5px 12px;
     box-sizing: border-box;
     border-radius: 6px;
     position: relative;
-    word-break: break-all;
+    word-break:keep-all;
+    margin-bottom: 10px;
+    /* padding: 10px; */
 }
 
 
-.dialog-box1::before {
+.dialog-box1-text::before {
     content: '';
     position: absolute;
     top: 50%;
-    left: -5px;
-    width: 10px;
+    left: -4px;
+    width: 9px;
     height: 10px;
-    margin-top: -10px;
+    margin-top: -9px;
     background: inherit;
     transform: rotate(45deg);
 }
 
-.dialog-box2::after {
+.dialog-box2-text::after {
     content: '';
     position: absolute;
     top: 50%;
-    right: -5px;
-    width: 10px;
+    right: -4px;
+    width: 9px;
     height: 10px;
-    margin-top: -10px;
+    margin-top: -9px;
     background: inherit;
     transform: rotate(45deg);
+}
+
+.dialog-box1-text {
+    background-color: #eee;
 }
 
 .dialog-box1 {
-    background-color: #eee;
-    align-self: flex-start;}
+    align-self: flex-start;
+}
+
+.dialog-box2-text {
+    background-color: #08c44d;
+}
 
 .dialog-box2 {
-    background-color: #08c44d;
     align-self: flex-end;
 }
 
@@ -85,13 +96,6 @@ background-color: #f1f1f1;
 border-radius: 4px;
 }
   
-.dialog-box1,
-.dialog-box2 {
-    margin-bottom: 10px;
-    padding: 10px;
-    transition: transform 0.3s; /* Apply transition to the transform property */
-}
-
 .dialog-box1-enter,
 .dialog-box2-enter {
 transform: translateY(100%); /* Initial position for new divs */
@@ -101,4 +105,21 @@ transform: translateY(100%); /* Initial position for new divs */
 .dialog-box2-enter-active {
 transform: translateY(0); /* Final position for new divs */
 transition: transform 0.3s; /* Apply transition to the transform property */
+}
+
+.sent-fail {
+    position: absolute;
+    top: 5px;
+    left: -35px;
+    padding: 2px;
+    font-size: 12px;
+    width: 14px;
+    height: 14px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight:600;
 }

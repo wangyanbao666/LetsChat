@@ -17,3 +17,7 @@ export function updateConnection(previousConnectionRequest, invitation){
     let newConnectionRequest = [invitation, ...previousConnectionRequest]
     return newConnectionRequest
 }
+
+export function getTime(){
+    return new Date().toJSON();
+}

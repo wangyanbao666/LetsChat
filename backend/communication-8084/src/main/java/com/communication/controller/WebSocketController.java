@@ -1,11 +1,9 @@
 package com.communication.controller;
 
 
-import com.commons.entities.Connection;
-import com.commons.entities.Message;
-import com.commons.entities.User;
+import com.commons.entities.*;
 import com.communication.clients.MessageManagementClient;
-import com.commons.entities.InvitationRequest;
+import com.communication.dao.UserDao;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class WebSocketController {
     @Resource
+    private UserDao userDao;
+
+    @Resource
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Resource
@@ -29,11 +30,25 @@ public class WebSocketController {
 //    @SendTo("/user/queue/chat")
     public void processChatMessage(Message message){
         log.info("message is: "+message);
-        System.out.println(message);
         long receiverId = message.getReceiverId();
+        long senderId = message.getSenderId();
+//        check whether the receiver is connected with the sender
+        User sender = userDao.getUserById(senderId);
+        CommonResult result = new CommonResult();
+
+        log.info(sender.getConnections().toString());
+        if (!sender.getConnections().contains(receiverId)){
+            result.setCode(400);
+            result.setData(message);
+            simpMessagingTemplate.convertAndSend("/queue/"+senderId+"/chat/confirm", result);
+            return;
+        }
+        log.info("send success");
         messageManagementClient.saveMessage(message);
         simpMessagingTemplate.convertAndSend("/queue/"+receiverId+"/chat", message);
-        System.out.println("receiver id is: "+receiverId);
+        result.setCode(200);
+        result.setData(message);
+        simpMessagingTemplate.convertAndSend("/queue/"+senderId+"/chat/confirm", result);
     }
 
 

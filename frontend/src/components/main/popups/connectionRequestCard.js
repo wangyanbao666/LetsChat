@@ -2,11 +2,13 @@ import { useContext, useState } from "react";
 import $ from "jquery";
 import config from "../../../config";
 import { DataContext } from "../../common/dataContext";
+import { checkUserExistance } from "../../../utils/commonMethods";
+import { compareByName } from "../../../utils/compareMethods";
 
 export default function ConnectionRequestCard(props){
     const invitation = props.invitation;
     const [handled, setHandled] = useState(invitation.handled);
-    const {setFriends, updateChatHistory, userInfo, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
+    const {friends, setFriends, updateChatHistory, userInfo, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
     const imageLink = invitation.senderImageUrl==null ? "/imgs/selfie-place-holder.jpg" : invitation.senderImageUrl;
     
     function accept(){
@@ -20,11 +22,15 @@ export default function ConnectionRequestCard(props){
                 if (result.code == 200){
                     setHandled(1)
                     let newConnection = result.data
-                    setFriends((previousFriends) => {
-                        const newFriends = [newConnection, ...previousFriends];
-                        return newFriends;
-                    })
-                    updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id, true)
+                    if (!checkUserExistance(friends, newConnection)){
+                        console.log("user not exisit")
+                        setFriends(previousFriends => {
+                          let newFriends = [newConnection, ...previousFriends];
+                          newFriends.sort((a, b) => compareByName(a.username, b.username));
+                          return newFriends;
+                        });
+                      }
+                    // updateChatHistory(newConnection.id, `Hi I'm ${userInfo.username}`, true, userInfo.id, newConnection.id, true)
                     setUnHandledConnectionNum(unHandledConnectionNum-1);
                     alert("Accepted");
                 }

@@ -22,7 +22,12 @@ export default function InputBar(){
             return;
         }
         if (websocket!==null){
-            updateChatHistory(selectedUser.id, text, true, userInfo.id, selectedUser.id, true);
+            let message = {
+                senderId: userInfo.id,
+                receiverId: selectedUser.id,
+                content: text,
+            }
+            updateChatHistory(message);
             messageBoxRef.current.value="";
         }
         else {
