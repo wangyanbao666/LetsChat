@@ -36,7 +36,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
                 if(StompCommand.CONNECT.equals(accessor.getCommand())){
                     System.out.println("Connect ");
                 } else if(StompCommand.SUBSCRIBE.equals(accessor.getCommand())){
@@ -47,7 +46,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     System.out.println("Exit ");
                 } else {
                 }
-                System.out.println(accessor);
                 return message;
             }
         });

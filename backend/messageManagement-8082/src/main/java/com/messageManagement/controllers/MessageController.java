@@ -1,6 +1,7 @@
 package com.messageManagement.controllers;
 
 import com.commons.entities.CommonResult;
+import com.commons.entities.ConnectionPair;
 import com.commons.entities.Message;
 import com.messageManagement.pojo.SenderReceiverId;
 import com.messageManagement.services.MessageService;
@@ -36,4 +37,5 @@ public class MessageController {
     public CommonResult updateMessageSeen(@RequestBody SenderReceiverId senderReceiverId){
         return messageService.updateMessageSeen(senderReceiverId.getReceiverId(), senderReceiverId.getSenderId());
     }
+
 }

@@ -16,4 +16,5 @@ public interface MessageManagementClient {
     @PostMapping("message/getHistory")
     CommonResult<Map<Long, List<Message>>> getChatHistory(@RequestParam("id") long id);
 
+
 }

@@ -27,7 +27,6 @@ public class WebSocketController {
 
 
     @MessageMapping("/chat")
-//    @SendTo("/user/queue/chat")
     public void processChatMessage(Message message){
         log.info("message is: "+message);
         long receiverId = message.getReceiverId();
@@ -51,6 +50,7 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSend("/queue/"+senderId+"/chat/confirm", result);
     }
 
+    @MessageMapping("/")
 
     @PostMapping("connection/send")
     public void sendInvitation(@RequestBody Connection connection){
@@ -63,5 +63,4 @@ public class WebSocketController {
         long id = invitationRequest.getConnection().getSenderId();
         simpMessagingTemplate.convertAndSend("/queue/"+id+"/invitation/result", invitationRequest);
     }
-
 }

@@ -13,17 +13,17 @@ spring:
     username: root
     password: Wyb68319373*
 
-  rabbitmq:
-    host: 192.168.40.128
-    port: 5672
-    username: manager
-    password: 123456
-    virtual-host: wyb
+#  rabbitmq:
+#    host: 192.168.40.128
+#    port: 5672
+#    username: manager
+#    password: 123456
+#    virtual-host: wyb
 
   data:
     redis:
       database: 0
-      host: 192.168.40.128
+      host: 54.151.150.206
       password: 123456
       port: 6379
       timeout: 60000

@@ -1,6 +1,7 @@
 package com.messageManagement.services;
 
 import com.commons.entities.CommonResult;
+import com.commons.entities.ConnectionPair;
 import com.commons.entities.Message;
 import com.messageManagement.dao.MessageDao;
 import jakarta.annotation.Resource;

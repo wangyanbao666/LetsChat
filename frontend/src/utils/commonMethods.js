@@ -1,3 +1,5 @@
+const oneDay = 24 * 60 * 60 * 1000;
+
 export function checkUserExistance(friends, user){
     for (let friend of friends){
         if (friend.id == user.id){
@@ -24,4 +26,29 @@ export function getTime(){
 
 export function getUserTimeZone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+export function convertSystemTime(datetime){
+    const dateTime = new Date(datetime);
+    return dateTime.toLocaleString('en-US', {timeZone: getUserTimeZone()})
+}
+
+export function getSystemTime() {
+    return new Date().toLocaleString('en-US', {timeZone: getUserTimeZone()})
+}
+
+
+export function getDateDiff(datetime){
+    const utcDate1 = new Date()
+    const utcDate2 = new Date(datetime)
+    const diffDays = Math.floor((utcDate1 - utcDate2) / oneDay);
+    if (diffDays === 0){
+        return "Today"
+    }
+    else if (diffDays <= 1){
+        return "Yesterday"
+    }
+    else {
+        return utcDate2.toLocaleTimeString([], {month:"short", day:"2-digit"})
+    }
 }

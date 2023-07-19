@@ -10,7 +10,6 @@ export default function UserCard(props){
     const user = props.user;
     const onClick = props.onClick;
     const inChat = props.inChat;
-    console.log(props.lastMessage)
     const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
     const [unseenMessagesCount, setUnseenMessagesCount] = useState(numOfuUnseenMessage[user.id]);
     const [expanded, setExpanded] = useState(false);
