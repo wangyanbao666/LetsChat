@@ -20,7 +20,7 @@ export default function Login(){
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
 	const {setUsername, setUserInfo, setChatHistory, setFriends, setFriendsForChat,
-		setConnectionRequest, history, websocket, setWebsocket,
+		setConnectionRequest, history, websocket,
 		unHandledConnectionNum, setUnHandledConnectionNum, setNumOfUnseenMessage} = useContext(DataContext)
 
 
@@ -138,7 +138,6 @@ export default function Login(){
 		return {"unseenCount": unseenCount, "processedConnectionsForChat": processedConnectionsForChat, 
 		"processedHistory": processedHistory, "connections": connections}
 	}
-
 
 
 	function changeRegister(){

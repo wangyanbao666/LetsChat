@@ -37,7 +37,7 @@ export default function DialogDisplayArea(){
     useEffect(() => {
         if (newMessagesLoaded){
             setNewMessagesLoaded(false)
-            console.log(displayAreaRef.current.scrollHeight)
+            // console.log(displayAreaRef.current.scrollHeight)
             displayAreaRef.current.scrollTop = displayAreaRef.current.scrollHeight;
         }
     }, [newMessagesLoaded])

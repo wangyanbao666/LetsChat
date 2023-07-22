@@ -85,8 +85,38 @@ function DataProvider({ children }) {
   }, [unHandledConnectionNum])
 
   useEffect(() => {
-    console.log("friends: "+friends)
-  }, [friends])
+    if (websocket!=null){
+      const handlers = []
+      const handleChange = (data) => {
+        let userStatusString = data.body;
+        let userStatus = JSON.parse(userStatusString);
+        let userId = userStatus.id
+        let status = userStatus.status
+
+        const updatedFriends = friends.map((friend) =>
+          friend.id === userId ? { ...friend, status: status } : friend
+        );
+        console.log(updatedFriends)
+        setFriends(updatedFriends);
+        // setFriends(prevFriends => {
+        //   for (let friend of prevFriends){
+        //     if (friend.id == userId){
+        //       friend.status = status;
+        //     }
+        //   }
+        //   return prevFriends
+        // })
+      }
+      for (let friend of friends){
+        handlers.push(websocket.subscribe(`/queue/${friend.id}/status`, handleChange))
+      }
+      return () => {
+        for (let handler of handlers){
+          handler.unsubscribe();
+        }
+      };
+    }
+  }, [websocket, friends])
 
   useEffect(() => {
     if (websocket==null){
@@ -214,7 +244,10 @@ function DataProvider({ children }) {
     }
     let websocket = new WebSocket(config.websocketUrl);
     let stompClient = Stomp.over(websocket);
-    stompClient.connect({}, function(frame) {
+    const headers = {
+      'userId': userId,
+    };
+    stompClient.connect(headers, function(frame) {
       setWebsocket(stompClient);
     });
   }

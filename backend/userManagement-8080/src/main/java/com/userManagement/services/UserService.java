@@ -51,8 +51,6 @@ public class UserService {
             if (Objects.equals(checkUser.getPassword(), user.getPassword())){
 //                try {
                     info.put("user", checkUser);
-                    checkUser.setStatus(1);
-                    userDao.updateUser(checkUser);
                     List<Long> connections = checkUser.getConnections();
 //                    log.info(connections.toString());
 

@@ -22,4 +22,17 @@
         where id=#{id}
     </select>
 
+    <update id="updateUserStatusOnline" parameterType="Long">
+        update user_t
+        set status = 1
+        where id = #{id}
+    </update>
+
+    <update id="updateUserStatusOffline">
+        update user_t
+        set status = 0,
+            last_online = #{last_online}
+        where id = #{id}
+    </update>
+
 </mapper>

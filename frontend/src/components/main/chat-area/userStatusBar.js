@@ -1,14 +1,21 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../common/dataContext";
-import { useState } from "react";
 
 export default function UserStatusBar(){
-    const {selectedUser, setSelectedUser} = useContext(DataContext);
+    const {selectedUser, friends} = useContext(DataContext);
+    const [status, setStatus] = useState(selectedUser.status);
+
     useEffect(() => {
-        // This code will run whenever selectedUserId changes
-        // Place the code you want to auto reload here
-        // console.log('UserStatusBar reloaded!');
-      }, [selectedUser]);
+        console.log("detect change in friends")
+        console.log(friends)
+        if (selectedUser!=null){
+            for (let friend of friends){
+                if (friend.id == selectedUser.id){
+                    setStatus(friend.status)
+                }
+            }
+        }
+    }, [friends, selectedUser])
 
     const imageLink = selectedUser.image==null ? "/imgs/selfie-place-holder.jpg" : selectedUser.image;
 
@@ -17,7 +24,7 @@ export default function UserStatusBar(){
             <img src={imageLink} className="user-statusbar-img"></img>
             <div className="user-statusbar-text-region">
                 <div className="username">{selectedUser.username}</div>
-                <div>{selectedUser.status===0 ? "offline" : "online"}</div>
+                <div>{status===0 ? "offline" : "online"}</div>
             </div>
         </div>
     )

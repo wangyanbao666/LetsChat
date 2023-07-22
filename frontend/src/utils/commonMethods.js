@@ -49,6 +49,6 @@ export function getDateDiff(datetime){
         return "Yesterday"
     }
     else {
-        return utcDate2.toLocaleTimeString([], {month:"short", day:"2-digit"})
+        return utcDate2.toLocaleDateString("en-US", {month:"short", day:"2-digit"})
     }
 }
