@@ -7,9 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * when inserting or updating the connection, we will operate on
@@ -20,6 +18,7 @@ import java.util.Objects;
 public class RedisDao {
     private final RedisTemplate redisTemplate;
     private final String CONNECTION_DICT_KEY = "connection";
+    private final String REMARK_DICT_KEY = "remark";
 
     @Autowired
     public RedisDao(RedisTemplate redisTemplate){
@@ -68,5 +67,29 @@ public class RedisDao {
         hashOps.put(CONNECTION_DICT_KEY, String.valueOf(connection.getReceiverId()), connections);
         hashOps.put(CONNECTION_DICT_KEY, String.valueOf(connection.getSenderId()), connections2);
     }
+
+    public void addRemark(long userId, long friendId, String remark){
+        HashOperations<String, Long, HashMap<Long, String>> hashOperations = redisTemplate.opsForHash();
+        if (hashOperations.get(REMARK_DICT_KEY, userId)==null){
+            hashOperations.put(REMARK_DICT_KEY, userId, new HashMap<>());
+        }
+        HashMap<Long, String> map = hashOperations.get(REMARK_DICT_KEY, userId);
+        assert map != null;
+        map.put(friendId, remark);
+        hashOperations.put(REMARK_DICT_KEY, userId, map);
+
+    }
+
+    public Map<Long, String> getRemark(long userId){
+        HashOperations<String, Long, HashMap<Long, String>> hashOperations = redisTemplate.opsForHash();
+        return hashOperations.get(REMARK_DICT_KEY, userId);
+    }
+
+    public void removeRemark(long userId, long friendId){
+        HashOperations<String, Long, HashMap<Long, String>> hashOperations = redisTemplate.opsForHash();
+        HashMap<Long, String> map = hashOperations.get(REMARK_DICT_KEY, userId);
+        assert map != null;
+        map.remove(userId);
+        hashOperations.put(REMARK_DICT_KEY, userId, map);    }
 
 }

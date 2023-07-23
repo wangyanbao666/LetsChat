@@ -2,18 +2,22 @@ import { useContext, useEffect, useState, useRef } from "react"
 import { DataContext } from "../../common/dataContext";
 import $ from 'jquery'
 import config from "../../../config";
+import ChangeRemarkPopup from "../popups/changeRemarkPopup";
 
 // including username, user status, user image and the last message
 export default function UserCard(props){
 
-    const {setSelectedUser, setFriends, userInfo, numOfuUnseenMessage, setNumOfUnseenMessage} = useContext(DataContext)
+    const {setSelectedUser, setFriends, userInfo, numOfuUnseenMessage, remarks} = useContext(DataContext)
     const user = props.user;
     const onClick = props.onClick;
     const inChat = props.inChat;
     const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
     const [unseenMessagesCount, setUnseenMessagesCount] = useState(numOfuUnseenMessage[user.id]);
     const [expanded, setExpanded] = useState(false);
-    const expandRef = useRef(null)
+    const [showRemarkPopup, setShowRemarkPopup] = useState(false);
+    const expandRef = useRef(null);
+    const changeRemarkRef = useRef(null);
+    const screen = document.getElementsByClassName("main-content");
     
     const handleClick = () => {
         if (inChat){
@@ -59,6 +63,10 @@ export default function UserCard(props){
         setSelectedUser(user);
     }
 
+    const changeRemarkHandler = () => {
+        setShowRemarkPopup(true)
+    }
+
     useEffect(() => {
         setUnseenMessagesCount(numOfuUnseenMessage[user.id])
     }, [numOfuUnseenMessage])
@@ -67,6 +75,9 @@ export default function UserCard(props){
         const handleClickOutside = (event) => {   
             if (expandRef.current && !expandRef.current.contains(event.target)) {
                 setExpanded(false);
+            }
+            if (changeRemarkRef.current && !changeRemarkRef.current.contains(event.target)){
+                setShowRemarkPopup(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -79,7 +90,7 @@ export default function UserCard(props){
         <div className={`user-card ${props.selected? "selected":""}`}>
             <img src={imageLink} className="user-card-img"></img>
             <div className="text-region" onClick={handleClick}>
-                <div className="username">{user.username}</div>
+                <div className="username">{remarks[user.id]!==undefined && remarks[user.id]!=="" ? remarks[user.id] : user.username}</div>
                 <div className="lastmessage">{props.lastMessage}</div>
             </div>
             {inChat && unseenMessagesCount>0 && <div className="new-message-indication">{unseenMessagesCount}</div>}
@@ -91,9 +102,11 @@ export default function UserCard(props){
                 </div>
             </div>}
             {!inChat && expanded && <div className="expanded-area" ref={expandRef}>
-                    <button onClick={deleteConnection} className="delete-button">Delete</button>
-                    <button onClick={startChat} className="chat-button">Chat</button>
+                    <div onClick={deleteConnection} className="user-expand-button">Delete</div>
+                    <div onClick={startChat} className="user-expand-button">Chat</div>
+                    <div onClick={changeRemarkHandler} className="user-expand-button">Change Remark</div>
                 </div>}
+            {showRemarkPopup && <ChangeRemarkPopup ref={changeRemarkRef} setShowRemarkPopup={setShowRemarkPopup} id={user.id} username={user.username}></ChangeRemarkPopup>}
         </div>
     )
 }

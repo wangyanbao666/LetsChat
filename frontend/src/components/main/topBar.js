@@ -7,9 +7,8 @@ import HandleConnectionPopUp from "./popups/handleConnectionPopUp";
 
 export default function TopBar(){
     const navigate = useNavigate();
-    const {isLoggedIn} = useContext(DataContext)
     const {showAddConnectionPopUp, setShowAddConnectionPopUp, showHandleConnectionPopUp, 
-        setShowHandleConnectionPopUp, unHandledConnectionNum, setUnHandledConnectionNum} = useContext(DataContext);
+        setShowHandleConnectionPopUp, unHandledConnectionNum} = useContext(DataContext);
     const screen = document.getElementsByClassName("main-content");
 
     function goToLogin(){

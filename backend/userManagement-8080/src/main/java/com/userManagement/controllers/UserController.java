@@ -1,9 +1,6 @@
 package com.userManagement.controllers;
 
-import com.commons.entities.CommonResult;
-import com.commons.entities.Connection;
-import com.commons.entities.ConnectionPair;
-import com.commons.entities.User;
+import com.commons.entities.*;
 import com.userManagement.services.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -55,5 +52,10 @@ public class UserController {
         User user1 = connectionPair.getUser1();
         User user2 = connectionPair.getUser2();
         return userService.deleteConnection(user1, user2);
+    }
+
+    @PostMapping("user/remark/add")
+    public CommonResult addRemark(@RequestBody AddRemarkBody addRemarkBody){
+        return userService.addRemark(addRemarkBody);
     }
 }

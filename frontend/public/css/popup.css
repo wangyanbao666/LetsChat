@@ -113,3 +113,45 @@
     background-color: #f1f1f1;
     border-radius: 4px;
     }
+
+
+.change-remark-popup {
+    z-index: 100;
+    padding: 20px;
+    background-color: beige;
+    border-radius: 5px;
+    width: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.change-remark-popup .change-remark-bar {
+    height: 40px;
+    width: 100%;
+    font-size: 25px;
+    margin: auto;
+    text-indent: 10px;
+}
+
+.change-remark-popup .change-remark-button {
+    font-size: medium;
+    background-color:coral;
+    margin: 10px;
+}
+
+.change-remark-popup button {
+    position: relative;
+    background-color: beige;
+    height: 40px;
+    font-size: large;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

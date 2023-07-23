@@ -5,7 +5,8 @@ const config = {
     sendInvitationUrl: 'http://localhost:8080/user/connection/add',
     handleInvitationUrl: 'http://localhost:8080/user/connection/handle',
     updateMessageSeenUrl: 'http://localhost:8082/message/update/seen',
-    deleteConnectionUrl: 'http://localhost:8080/user/connection/delete'
+    deleteConnectionUrl: 'http://localhost:8080/user/connection/delete',
+    addRemarkUrl: 'http://localhost:8080/user/remark/add'
   };
   
   export default config;

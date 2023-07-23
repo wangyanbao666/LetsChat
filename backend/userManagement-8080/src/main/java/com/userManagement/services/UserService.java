@@ -3,6 +3,7 @@ package com.userManagement.services;
 import com.commons.entities.*;
 import com.userManagement.clients.CommunicationClient;
 import com.userManagement.clients.MessageManagementClient;
+import com.userManagement.dao.RedisDao;
 import com.userManagement.dao.UserDao;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import java.util.*;
 public class UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    private RedisDao redisDao;
     @Resource
     private PublishConnectionRequestService publishConnectionRequestService;
     @Resource
@@ -49,41 +52,37 @@ public class UserService {
         User checkUser = userDao.getUserByName(user.getUsername());
         if (checkUser != null){
             if (Objects.equals(checkUser.getPassword(), user.getPassword())){
-//                try {
-                    info.put("user", checkUser);
-                    List<Long> connections = checkUser.getConnections();
-//                    log.info(connections.toString());
+                info.put("user", checkUser);
+                List<Long> connections = checkUser.getConnections();
 
-                    List<User> users = new ArrayList<>();
-                    if (connections.size()>0){
-                        users = userDao.getUserByIds(connections);
-                    }
-                    log.info(users.toString());
+                List<User> users = new ArrayList<>();
+                if (connections.size()>0){
+                    users = userDao.getUserByIds(connections);
+                }
+                log.info(users.toString());
 
-                    users.forEach(userConnected -> {
-                        userConnected.setPassword(null);
-                    });
-                    info.put("connections", users);
+                users.forEach(userConnected -> {
+                    userConnected.setPassword(null);
+                });
+                info.put("connections", users);
 
-                    CommonResult<Map<Long, List<Message>>> commonResult = messageManagementClient.getChatHistory(checkUser.getId());
-                    Map<Long, List<Message>> chatHistory;
-                    chatHistory = commonResult.getData();
-                    info.put("chatHistory", chatHistory);
+                CommonResult<Map<Long, List<Message>>> commonResult = messageManagementClient.getChatHistory(checkUser.getId());
+                Map<Long, List<Message>> chatHistory;
+                chatHistory = commonResult.getData();
+                info.put("chatHistory", chatHistory);
 
-                    List<Connection> invitations = publishConnectionRequestService.getConnections(checkUser.getId());
-                    if (invitations!=null) {
-                        log.info(invitations.toString());
-                    }
-                    info.put("invitations", invitations);
+                List<Connection> invitations = publishConnectionRequestService.getConnections(checkUser.getId());
+                if (invitations!=null) {
+                    log.info(invitations.toString());
+                }
+                info.put("invitations", invitations);
 
-                    result = new CommonResult(200, "Login Successfully!", info);
-                    publishConnectionRequestService.createNewQueue(user.getUsername());
-                    return result;
-//                } catch (Exception e){
-//                    log.error(Arrays.toString(e.getStackTrace()));
-//                    result = new CommonResult(402, "The server has internal errors, please wait for a while.", null);
-//                    return result;
-//                }
+                Map<Long, String> remarks = redisDao.getRemark(checkUser.getId());
+                info.put("remarks", remarks);
+
+                result = new CommonResult(200, "Login Successfully!", info);
+                publishConnectionRequestService.createNewQueue(user.getUsername());
+                return result;
 
             }
             result = new CommonResult(401, "The password is not correct.", null);
@@ -160,6 +159,13 @@ public class UserService {
         user2Check.getConnections().remove(user1Check.getId());
         userDao.updateUser(user1Check);
         userDao.updateUser(user2Check);
+        result.setCode(200);
+        return result;
+    }
+
+    public CommonResult addRemark(AddRemarkBody addRemarkBody){
+        CommonResult result = new CommonResult();
+        redisDao.addRemark(addRemarkBody.getUserId(), addRemarkBody.getFriendId(), addRemarkBody.getRemark());
         result.setCode(200);
         return result;
     }

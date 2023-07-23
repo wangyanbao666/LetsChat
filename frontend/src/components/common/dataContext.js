@@ -15,6 +15,7 @@ function DataProvider({ children }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [userInfo, setUserInfo] = useState({});
   const [friends, setFriends] = useState([]);
+  const [remarks, setRemarks] = useState({})
   const [friendsForChat, setFriendsForChat] = useState([]);
   const [chatHistory, setChatHistory] = useState({});
   const [websocket, setWebsocket] = useState(null);
@@ -252,12 +253,32 @@ function DataProvider({ children }) {
     });
   }
 
-  const setupRabbitmqConnection = () => {
-    const username = userInfo.username;
-    if (username === undefined){
-      return;
-    }
-    
+  const changeRemark = (friendId, remark) => {
+    $.ajax({
+      url: config.addRemarkUrl,
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(
+        {
+          userId: userInfo.id,
+          friendId: friendId,
+          remark: remark
+        }
+      ),
+      success: function(result){
+        let statusCode = result.code;
+        if (statusCode == 200){
+          const updatedRemarks = { ...remarks };
+          updatedRemarks[friendId] = remark;
+          setRemarks(updatedRemarks)
+          if (selectedUser!==null && selectedUser.id==friendId){
+            const newSelectedUser = {...selectedUser}
+            newSelectedUser.remark = remark
+            setSelectedUser(newSelectedUser)
+          }
+        }
+      }
+    })
   }
 
 
@@ -270,7 +291,7 @@ function DataProvider({ children }) {
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
         userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
         showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum,
-        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat, timeZone}}>
+        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat, timeZone, remarks, setRemarks, changeRemark}}>
           {children}
     </DataContext.Provider>
   );

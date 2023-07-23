@@ -20,7 +20,7 @@ export default function Login(){
 	const [registerVisibility, setRegisterVisibility] = useState(true)
 
 	const {setUsername, setUserInfo, setChatHistory, setFriends, setFriendsForChat,
-		setConnectionRequest, history, websocket,
+		setConnectionRequest, history, websocket, remarks, setRemarks,
 		unHandledConnectionNum, setUnHandledConnectionNum, setNumOfUnseenMessage} = useContext(DataContext)
 
 
@@ -77,12 +77,14 @@ export default function Login(){
 		let userInfo = data.user;
 		let history = data.chatHistory;
 		let invitations = data.invitations;
+		let remarks = data.remarks || {};
 		let processedResult = preprocessChatHistory(connections, history, userId);
 		setUserInfo(userInfo);
 		setFriends(processedResult.connections);
 		setFriendsForChat(processedResult.processedConnectionsForChat);
 		setChatHistory(processedResult.processedHistory);
 		setNumOfUnseenMessage(processedResult.unseenCount);
+		setRemarks(remarks);
 		console.log(invitations)
 		if (invitations==null){
 			invitations = []
