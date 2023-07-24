@@ -20,7 +20,7 @@ public class Message {
 //    sent, seen, delivered
     private int flag;
 
-    Message(){
+    public Message(){
         datetime = Timestamp.valueOf(LocalDateTime.now());
         flag = 0;
     }

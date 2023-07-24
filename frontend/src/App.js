@@ -9,7 +9,7 @@ import { useContext, useEffect, useNavigate } from "react";
 
 function App() {
   const {userInfo} = useContext(DataContext);
-  if (userInfo.id===undefined){
+  if (userInfo===undefined || userInfo.id===undefined){
     return <Navigate to="/login"></Navigate>
   }
   return (

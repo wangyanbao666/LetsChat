@@ -155,3 +155,72 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.change-profile-popup {
+    z-index: 100;
+    padding: 20px;
+    background-color: beige;
+    border-radius: 5px;
+    width: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 5s ease-in-out;
+    display: flex;
+}
+
+.change-profile-popup .change-avatar {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    margin: 10px;
+    height: 100px;
+    align-items: center;
+}
+
+.change-profile-popup .change-avatar .user-card-img {
+    position: absolute;
+    top: 20px;
+    margin: 0;
+}
+
+.change-profile-popup .change-username {
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+    margin: 10px;
+    height: 100px;
+    align-items: center
+;}
+
+.change-profile-popup .change-username .username-edit-box {
+    width: 90%;
+    border-radius: 10px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+
+.change-profile-popup .change-username .username-edit-box:focus {
+    border-color: #00f; /* Highlighted border color when in focus */
+}
+
+.change-profile-popup .bottom {
+    position: absolute;
+    bottom: 20px;
+}
+
+.change-profile-popup .button{
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.change-profile-popup .button:hover{
+    background-color: rgba(76, 73, 73, 0.5)
+}

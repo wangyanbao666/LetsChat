@@ -62,5 +62,10 @@
             connections=#{user.connections, typeHandler=com.commons.typeHandler.LongArrayTypeHandler}, last_online=#{user.lastOnline}, status=#{user.status}
         where id=#{user.id}
     </update>
+    <update id="updateUsername">
+        update user_t
+        set username = #{username}
+        where id = #{id}
+    </update>
 
 </mapper>

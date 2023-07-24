@@ -7,7 +7,7 @@ import { DataContext } from "../../common/dataContext";
 const HandleConnectionPopUp = forwardRef(({props}, ref) => {
     const {connectionRequest} = useContext(DataContext);
     return (
-        <div className="handle-connection-popup" ref={ref}>
+        <div className="handle-connection-popup popup" ref={ref}>
             <h4 className="title">
                 New Invitations
             </h4>

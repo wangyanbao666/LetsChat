@@ -169,4 +169,18 @@ public class UserService {
         result.setCode(200);
         return result;
     }
+
+    public CommonResult changeUserName(User user){
+        CommonResult commonResult = new CommonResult();
+        long id = user.getId();
+        String username = user.getUsername();
+        User checkUser = userDao.getUserByName(username);
+        if (checkUser!=null){
+            commonResult.setCode(400);
+            return commonResult;
+        }
+        userDao.updateUsername(id, username);
+        commonResult.setCode(200);
+        return commonResult;
+    }
 }

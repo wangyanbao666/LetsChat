@@ -104,6 +104,8 @@
 
 
 .user-card .expanded-area{
+    max-height: 0;
+    overflow: hidden;
     position: absolute;
     background-color: #212121;
     width: 40%;
@@ -113,6 +115,7 @@
     align-items:center;
     justify-content: space-around;
     border-radius: 10px;
+    transition: all 0.5s ease;
 }
 
 .user-card .expanded-area .user-expand-button{

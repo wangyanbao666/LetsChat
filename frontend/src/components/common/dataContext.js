@@ -23,6 +23,7 @@ function DataProvider({ children }) {
   const [connectionRequest, setConnectionRequest] = useState([]);
   const [showAddConnectionPopUp, setShowAddConnectionPopUp] = useState(false);
   const [showHandleConnectionPopUp, setShowHandleConnectionPopUp] = useState(false);
+  const [showChangeProfilePopup, setShowChangeProfilePopup] = useState(false)
   const [numOfuUnseenMessage, setNumOfUnseenMessage] = useState({});
   const [timeZone] = useState(getUserTimeZone())
 
@@ -281,17 +282,39 @@ function DataProvider({ children }) {
     })
   }
 
+  const changeUsername = (newUsername) => {
+      let curUserInfo = {...userInfo}
+      curUserInfo.username = newUsername
+      $.post({
+        url: config.changeUsernameUrl,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(curUserInfo),
+        success: function(result){
+          let statusCode = result.code
+          if (statusCode === 200){
+            setUserInfo(curUserInfo)
+            alert(`Your username has been changed to ${newUsername}`)
+          }
+          else if (statusCode === 400){
+            alert("The username has been used, please choose another username")
+          }
+        }
+      })
+  }
+
 
   useEffect(() => {
     // setup connection when the userId changes
     setupWebsocketConnection();
-  }, [userInfo]);
+  }, [isLoggedIn]);
 
   return (
     <DataContext.Provider value={{ data, setData, username, setUsername, password, setPassword, isLoggedIn, setIsLoggedIn, selectedUser, setSelectedUser, chatHistory, setChatHistory,
         userInfo, setUserInfo, friends, setFriends, websocket, setWebsocket, updateChatHistory, showAddConnectionPopUp, setShowAddConnectionPopUp, 
         showHandleConnectionPopUp, setShowHandleConnectionPopUp, connectionRequest, setConnectionRequest, unHandledConnectionNum, setUnHandledConnectionNum,
-        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat, timeZone, remarks, setRemarks, changeRemark}}>
+        numOfuUnseenMessage, setNumOfUnseenMessage, friendsForChat, setFriendsForChat, timeZone, remarks, setRemarks, changeRemark, showChangeProfilePopup, setShowChangeProfilePopup,
+        changeUsername}}>
           {children}
     </DataContext.Provider>
   );

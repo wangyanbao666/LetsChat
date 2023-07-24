@@ -5,10 +5,7 @@ import com.userManagement.services.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -57,5 +54,10 @@ public class UserController {
     @PostMapping("user/remark/add")
     public CommonResult addRemark(@RequestBody AddRemarkBody addRemarkBody){
         return userService.addRemark(addRemarkBody);
+    }
+
+    @PostMapping("user/username/change")
+    public CommonResult changeUsername(@RequestBody User user){
+        return userService.changeUserName(user);
     }
 }

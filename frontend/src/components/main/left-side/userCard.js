@@ -17,7 +17,6 @@ export default function UserCard(props){
     const [showRemarkPopup, setShowRemarkPopup] = useState(false);
     const expandRef = useRef(null);
     const changeRemarkRef = useRef(null);
-    const screen = document.getElementsByClassName("main-content");
     
     const handleClick = () => {
         if (inChat){
@@ -27,6 +26,7 @@ export default function UserCard(props){
       };
 
     const expand = () => {
+        expandRef.current.style.maxHeight = "500px"
         setExpanded(true)
     }
 
@@ -75,6 +75,7 @@ export default function UserCard(props){
         const handleClickOutside = (event) => {   
             if (expandRef.current && !expandRef.current.contains(event.target)) {
                 setExpanded(false);
+                expandRef.current.style.maxHeight = 0
             }
             if (changeRemarkRef.current && !changeRemarkRef.current.contains(event.target)){
                 setShowRemarkPopup(false);
@@ -85,6 +86,8 @@ export default function UserCard(props){
           document.removeEventListener('mousedown', handleClickOutside);
         };
       }, []);
+
+
 
     return (
         <div className={`user-card ${props.selected? "selected":""}`}>
@@ -101,7 +104,7 @@ export default function UserCard(props){
                     <span></span>
                 </div>
             </div>}
-            {!inChat && expanded && <div className="expanded-area" ref={expandRef}>
+            {!inChat && <div className="expanded-area" ref={expandRef}>
                     <div onClick={deleteConnection} className="user-expand-button">Delete</div>
                     <div onClick={startChat} className="user-expand-button">Chat</div>
                     <div onClick={changeRemarkHandler} className="user-expand-button">Change Remark</div>
