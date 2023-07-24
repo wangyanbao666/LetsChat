@@ -1,14 +1,15 @@
-import { forwardRef, useContext, useRef } from "react"
+import { forwardRef, useContext, useEffect, useRef, useState } from "react"
 import { DataContext } from "../../common/dataContext"
-import TopBar from "../topBar"
 import config from "../../../config"
 import $ from "jquery"
 import generateUuid from "../../../utils/generateUuid"
 import { updateConnection } from "../../../utils/commonMethods"
+import AddConnectionUserCard from "./addConnectionUserCard"
 
 
 const AddConnectionPopUp = forwardRef(({props},ref) =>{
-    const {showAddConnectionPopUp, setShowAddConnectionPopUp, userInfo, setConnectionRequest} = useContext(DataContext);
+    const {setShowAddConnectionPopUp, userInfo, setConnectionRequest} = useContext(DataContext);
+    const [usersFound, setUsersFound] = useState([])
     const inputRef = useRef(null);
 
     const handleInputKeyDown = (event) => {
@@ -52,10 +53,65 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
         }
     }
 
+    const searchUsername = () => {
+        let username = inputRef.current.value
+        console.log("sending...")
+        if (username !== ""){
+            $.ajax({
+                url: config.searchUserByNameStartUrl,
+                method: "POST",
+                data: username, // Send the username string directly
+                contentType: "text/plain",
+                success: function(result){
+                    if (result.code===200){
+                        if (result.data !== null){
+                            setUsersFound(result.data.slice(0,10))
+                            console.log(result.data)
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    const debounce = (fn, wait) => {
+        var timeout = null;
+        return function(){
+            if (timeout!==null){
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(()=>fn(),wait);
+        }
+    }
+
+    var listener = debounce(searchUsername, 1000);
+    useEffect(() => {
+        inputRef.current.removeEventListener("input", listener);
+        inputRef.current.addEventListener("input", listener);
+        return () => {
+            if (inputRef.current!==null){
+                inputRef.current.removeEventListener("input",listener);
+            }
+        }
+    }, [])
+
     return (
         <div className="add-connection-popup popup" ref={ref}>
-            <input type="text" placeholder="search username" className="usersearchbar" ref={inputRef} tabIndex={0} onKeyDown={handleInputKeyDown}></input>
-            <button className="send-invitation" onClick={sendInvitation}>Send Invitation</button>
+            <div className="search-user-region">
+                {/* <button className="send-invitation" onClick={sendInvitation}>Send Invitation</button> */}
+                <input type="text" placeholder="search username" className="usersearchbar" ref={inputRef} tabIndex={0} onKeyDown={handleInputKeyDown}></input>
+                {usersFound.length!==0 ? usersFound.map(user => {
+                    if (user.id === userInfo.id){
+                        return;
+                    }
+                    const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
+                    return <AddConnectionUserCard imgSrc={imageLink} username={user.username}></AddConnectionUserCard>
+                }) : 
+                    <div>
+                        No result found.
+                    </div>
+                }
+            </div>
         </div> 
     )
 })

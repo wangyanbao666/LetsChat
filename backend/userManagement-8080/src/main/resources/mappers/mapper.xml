@@ -52,6 +52,14 @@
         from user_t
         where username=#{username}
     </select>
+
+    <select id="searchUserByNameStart" parameterType="String" resultMap="userResultMap">
+        select id, username
+        from user_t
+        where username LIKE CONCAT(#{username}, '%')
+        limit 10
+    </select>
+
     <insert id="insertUser" parameterType="com.commons.entities.User">
         INSERT INTO user_t (id, username, password, email, group_ids, connections, last_online, status)
         VALUES (#{user.id}, #{user.username}, #{user.password}, #{user.email}, #{user.groupIds, typeHandler=com.commons.typeHandler.LongArrayTypeHandler},

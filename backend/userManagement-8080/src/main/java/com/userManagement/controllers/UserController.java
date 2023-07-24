@@ -60,4 +60,10 @@ public class UserController {
     public CommonResult changeUsername(@RequestBody User user){
         return userService.changeUserName(user);
     }
+
+    @PostMapping("user/searchuser")
+    public CommonResult searchUserByNameStart(@RequestBody String username){
+        System.out.println(username);
+        return userService.searchUserByNameStart(username);
+    }
 }

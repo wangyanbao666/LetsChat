@@ -183,4 +183,12 @@ public class UserService {
         commonResult.setCode(200);
         return commonResult;
     }
+
+    public CommonResult searchUserByNameStart(String username){
+        CommonResult commonResult = new CommonResult();
+        List<User> users = userDao.searchUserByNameStart(username);
+        commonResult.setCode(200);
+        commonResult.setData(users);
+        return commonResult;
+    }
 }

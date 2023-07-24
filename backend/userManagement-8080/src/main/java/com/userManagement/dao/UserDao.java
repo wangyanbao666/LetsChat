@@ -14,6 +14,7 @@ public interface UserDao {
     User getUserById(@Param("id") long id);
     List<User> getUserByIds(@Param("ids") List<Long> ids);
     User getUserByName(@Param("username") String username);
+    List<User> searchUserByNameStart(@Param("username") String username);
     void insertUser(@Param("user") User user);
 
 //    may be replaced with more specific conditions

@@ -27,6 +27,27 @@
     margin: 10px;
 }
 
+.add-connection-popup .user-card {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.add-connection-popup .user-card:hover{
+    background-color:#fced3f;
+    opacity: 0.7;
+}
+
+.add-connection-popup .user-card .user-card-img {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin: 10px 10px 10px 10px;
+    align-self: flex-start;
+}
+
 .handle-connection-popup {
     z-index: 100;
     background-color: beige;
@@ -224,3 +245,5 @@
 .change-profile-popup .button:hover{
     background-color: rgba(76, 73, 73, 0.5)
 }
+
+
