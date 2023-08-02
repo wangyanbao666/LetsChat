@@ -3,9 +3,11 @@ package com.userManagement;
 import com.commons.entities.Connection;
 import com.commons.entities.User;
 import com.userManagement.dao.UserDao;
+import com.userManagement.services.EmailVerifier;
 import com.userManagement.services.PublishConnectionRequestService;
 import com.userManagement.services.UserService;
 import jakarta.annotation.Resource;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,15 @@ public class TestUserDao {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private EmailVerifier emailVerifier;
+
+
+    @Test
+    public void test1() throws MessagingException {
+        emailVerifier.sendVerificationEmail("2983636228@qq.com", "111");
+    }
 
 //    @Test
 //    public void test1(){

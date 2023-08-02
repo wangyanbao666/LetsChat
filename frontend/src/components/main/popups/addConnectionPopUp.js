@@ -72,6 +72,9 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
                 }
             })
         }
+        else {
+            setUsersFound([])
+        }
     }
 
     const debounce = (fn, wait) => {
@@ -84,7 +87,7 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
         }
     }
 
-    var listener = debounce(searchUsername, 1000);
+    var listener = debounce(searchUsername, 300);
     useEffect(() => {
         inputRef.current.removeEventListener("input", listener);
         inputRef.current.addEventListener("input", listener);
@@ -97,21 +100,21 @@ const AddConnectionPopUp = forwardRef(({props},ref) =>{
 
     return (
         <div className="add-connection-popup popup" ref={ref}>
-            <div className="search-user-region">
                 {/* <button className="send-invitation" onClick={sendInvitation}>Send Invitation</button> */}
                 <input type="text" placeholder="search username" className="usersearchbar" ref={inputRef} tabIndex={0} onKeyDown={handleInputKeyDown}></input>
-                {usersFound.length!==0 ? usersFound.map(user => {
-                    if (user.id === userInfo.id){
-                        return;
+                <div className="user-result">
+                    {usersFound.length!==0 ? usersFound.map(user => {
+                        if (user.id === userInfo.id){
+                            return;
+                        }
+                        const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
+                        return <AddConnectionUserCard imgSrc={imageLink} username={user.username}></AddConnectionUserCard>
+                    }) : 
+                        <div className="no-result">
+                            {/* No result found. */}
+                        </div>
                     }
-                    const imageLink = user.image==null ? "/imgs/selfie-place-holder.jpg" : user.image;
-                    return <AddConnectionUserCard imgSrc={imageLink} username={user.username}></AddConnectionUserCard>
-                }) : 
-                    <div>
-                        No result found.
-                    </div>
-                }
-            </div>
+                </div>
         </div> 
     )
 })

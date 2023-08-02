@@ -1,6 +1,7 @@
 server:
   port: 8080
 
+email-address: yanbaowang53@gmail.com
 
 spring:
   application:
@@ -13,7 +14,23 @@ spring:
     username: root
     password: Wyb68319373*
 
-#  rabbitmq:
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${email-address}
+    password: nrtlixoclfcxwofn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+
+
+  #  rabbitmq:
 #    host: 192.168.40.128
 #    port: 5672
 #    username: manager

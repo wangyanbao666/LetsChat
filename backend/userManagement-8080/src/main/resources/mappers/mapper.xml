@@ -7,13 +7,16 @@
     <insert id="createTable">
         create table if not exists user_t (
         id BIGINT AUTO_INCREMENT,
-        username varchar(50) unique,
-        password varchar(50),
-        email varchar(50),
+        username varchar(50) unique not null,
+        password varchar(50) not null,
+        email varchar(50) not null,
         group_ids TEXT,
         connections TEXT,
         last_online DATETIME,
         status int,
+        verified int DEFAULT 0,
+        verification_code varchar(50),
+        verification_time DATETIME,
         PRIMARY KEY (id),
         INDEX idx_username (username)
         );
@@ -23,22 +26,31 @@
         <result property="username" column="username" />
         <result property="password" column="password" />
         <result property="email" column="email" />
+        <result property="verified" column="verified"/>
         <result property="groupIds" column="groupIds" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
         <result property="connections" column="connections" javaType="List" jdbcType="VARCHAR" typeHandler="com.commons.typeHandler.LongArrayTypeHandler"/>
         <result property="lastOnline" column="lastOnline" />
         <result property="status" column="status" />
     </resultMap>
 
+    <resultMap id="verificationResultMap" type="com.commons.entities.Verification">
+        <result property="email" column="email" />
+        <result property="verified" column="verified"/>
+        <result property="code" column="code"/>
+        <result property="timestamp" column="timestamp"/>
+
+    </resultMap>
+
     <select id="getUserById" parameterType="Long" resultMap="userResultMap">
         select id, username, password, email, group_ids AS groupIds, connections,
-            last_online AS lastOnline, status
+            last_online AS lastOnline, status, verified
         from user_t
         where id=#{id}
     </select>
 
     <select id="getUserByIds" parameterType="List" resultMap="userResultMap">
         select id, username, password, email, group_ids AS groupIds, connections,
-            last_online AS lastOnline, status
+            last_online AS lastOnline, status, verified
         from user_t
         where id in
         <foreach collection="ids" item="id" open="(" separator="," close=")">
@@ -48,9 +60,22 @@
 
     <select id="getUserByName" parameterType="String" resultMap="userResultMap">
         select id, username, password, email, group_ids AS groupIds, connections,
-            last_online AS lastOnline, status
+            last_online AS lastOnline, status, verified
         from user_t
         where username=#{username}
+    </select>
+
+    <select id="getUserByEmail" parameterType="String" resultMap="userResultMap">
+        select id, username, password, email, group_ids AS groupIds, connections,
+            last_online AS lastOnline, status, verified
+        from user_t
+        where email=#{email}
+    </select>
+
+    <select id="getVerificationByCode" parameterType="String" resultMap="verificationResultMap">
+        select email, verified, verification_code AS code, verification_time AS timestamp
+        from user_t
+        where verification_code=#{verificationCode}
     </select>
 
     <select id="searchUserByNameStart" parameterType="String" resultMap="userResultMap">
@@ -60,10 +85,10 @@
         limit 10
     </select>
 
-    <insert id="insertUser" parameterType="com.commons.entities.User">
-        INSERT INTO user_t (id, username, password, email, group_ids, connections, last_online, status)
+    <insert id="insertUser">
+        INSERT INTO user_t (id, username, password, email, group_ids, connections, last_online, status, verification_code, verification_time)
         VALUES (#{user.id}, #{user.username}, #{user.password}, #{user.email}, #{user.groupIds, typeHandler=com.commons.typeHandler.LongArrayTypeHandler},
-        #{user.connections, typeHandler=com.commons.typeHandler.LongArrayTypeHandler}, #{user.lastOnline}, #{user.status})
+        #{user.connections, typeHandler=com.commons.typeHandler.LongArrayTypeHandler}, #{user.lastOnline}, #{user.status}, #{verificationCode}, #{timestamp})
     </insert>
     <update id="updateUser" parameterType="com.commons.entities.User">
         update user_t set username=#{user.username}, password=#{user.password}, email=#{user.email}, group_ids=#{user.groupIds, typeHandler=com.commons.typeHandler.LongArrayTypeHandler},
@@ -74,6 +99,17 @@
         update user_t
         set username = #{username}
         where id = #{id}
+    </update>
+    <update id="updateVerified">
+        update user_t
+        set verified = 1
+        where email = #{email}
+    </update>
+    <update id="updateVerificationCode">
+        update user_t
+        set verification_code = #{verificationCode},
+            verification_time = #{timestamp}
+        where email = #{email}
     </update>
 
 </mapper>

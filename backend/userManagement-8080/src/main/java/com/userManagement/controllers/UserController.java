@@ -66,4 +66,9 @@ public class UserController {
         System.out.println(username);
         return userService.searchUserByNameStart(username);
     }
+
+    @GetMapping("user/verify")
+    public CommonResult verifyUser(@RequestParam("token") String token){
+        return userService.userVerify(token);
+    }
 }

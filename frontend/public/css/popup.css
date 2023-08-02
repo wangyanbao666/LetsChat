@@ -1,6 +1,7 @@
 .add-connection-popup {
     z-index: 100;
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     background-color: beige;
     border-radius: 5px;
     width: 50%;
@@ -11,14 +12,16 @@
     transition: all 5s ease-in-out;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .add-connection-popup .usersearchbar {
     height: 40px;
-    width: 100%;
     font-size: 25px;
-    margin: auto;
+    min-width: 90%;
+    max-width: 90%;
     text-indent: 10px;
+    position: relative;
 }
 
 .add-connection-popup .send-invitation {
@@ -27,12 +30,26 @@
     margin: 10px;
 }
 
+.add-connection-popup .user-result {
+    position: absolute;
+    width: 90%;
+    top: 100%;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 0 10px 10px;
+}
+
 .add-connection-popup .user-card {
     display: flex;
-    width: 100%;
+    width: 95%;
+    margin-bottom: 5px;
     align-items: center;
     border-radius: 10px;
     transition: all 0.3s ease;
+    background-color:rgb(101, 98, 98)c;
 }
 
 .add-connection-popup .user-card:hover{
@@ -46,6 +63,18 @@
     width: 30px;
     margin: 10px 10px 10px 10px;
     align-self: flex-start;
+}
+
+.add-connection-popup .user-card .username {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.add-connection-popup .no-result {
+    position: absolute;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .handle-connection-popup {
@@ -245,5 +274,6 @@
 .change-profile-popup .button:hover{
     background-color: rgba(76, 73, 73, 0.5)
 }
+
 
 

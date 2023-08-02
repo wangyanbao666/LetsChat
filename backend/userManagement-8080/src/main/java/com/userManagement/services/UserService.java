@@ -1,6 +1,7 @@
 package com.userManagement.services;
 
 import com.commons.entities.*;
+import com.commons.methods.UUIDGenerator;
 import com.userManagement.clients.CommunicationClient;
 import com.userManagement.clients.MessageManagementClient;
 import com.userManagement.dao.RedisDao;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -23,34 +25,64 @@ public class UserService {
     private PublishConnectionRequestService publishConnectionRequestService;
     @Resource
     private MessageManagementClient messageManagementClient;
+    @Resource
+    private EmailVerifier emailVerifier;
 
 
     public CommonResult<User> userRegister(User user){
-        User userCheck = userDao.getUserByName(user.getUsername());
+        User userCheckName = userDao.getUserByName(user.getUsername());
+        User userCheckEmail = userDao.getUserByEmail(user.getEmail());
         CommonResult<User> result;
-        if (userCheck == null){
-            try {
-                userDao.insertUser(user);
-                result = new CommonResult<User>(200, "Account created successfully!", user);
-                publishConnectionRequestService.createNewQueue(user.getUsername());
-                return result;
-            } catch (Exception e){
-                result = new CommonResult<User>(400, "There is something wrong with the server, please try again later", user);
-                return result;
-            }
-        }
-        else {
+
+        if (userCheckName != null && userCheckName.getVerified()==1){
             result = new CommonResult<User>(401, "The username has existed, please choose another username.", null);
             return result;
         }
+        if (userCheckEmail != null && userCheckEmail.getVerified() == 1){
+            result = new CommonResult<User>(401, "The email has been registered.", null);
+            return result;
+        }
+
+//        try {
+            String uuid = UUIDGenerator.generate();
+            emailVerifier.sendVerificationEmail(user.getEmail(), uuid);
+
+            if (userCheckEmail != null){
+                userDao.updateVerificationCode(userCheckEmail.getEmail(), uuid, new Timestamp(System.currentTimeMillis()));
+            }
+            else {
+                userDao.insertUser(user, uuid, new Timestamp(System.currentTimeMillis()));
+            }
+            result = new CommonResult<User>(200, "Account created successfully! Please verify your email", user);
+//            publishConnectionRequestService.createNewQueue(user.getUsername());
+            return result;
+//        } catch (Exception e){
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//            result = new CommonResult<User>(400, "There is something wrong with the server, please try again later", user);
+//            return result;
+//        }
+    }
+
+    public CommonResult userVerify(String verificationCode){
+        CommonResult result = new CommonResult();
+        boolean success = emailVerifier.verifyEmail(verificationCode);
+        if (success){
+            result.setCode(200);
+            result.setData("Email verified successfully!");
+        }
+        else {
+            result.setCode(400);
+            result.setData("The verification code has expired.");
+        }
+        return result;
     }
 
 //    need to return chat history
     public CommonResult<Map<String, Object>> userLogin(User user){
         CommonResult<Map<String, Object>> result;
         Map<String, Object> info = new HashMap<>();
-        User checkUser = userDao.getUserByName(user.getUsername());
-        if (checkUser != null){
+        User checkUser = userDao.getUserByEmail(user.getEmail());
+        if (checkUser != null && checkUser.getVerified()==1){
             if (Objects.equals(checkUser.getPassword(), user.getPassword())){
                 info.put("user", checkUser);
                 List<Long> connections = checkUser.getConnections();
@@ -81,14 +113,14 @@ public class UserService {
                 info.put("remarks", remarks);
 
                 result = new CommonResult(200, "Login Successfully!", info);
-                publishConnectionRequestService.createNewQueue(user.getUsername());
+//                publishConnectionRequestService.createNewQueue(user.getUsername());
                 return result;
 
             }
             result = new CommonResult(401, "The password is not correct.", null);
             return result;
         }
-        result = new CommonResult(400, "The username does not exist.", null);
+        result = new CommonResult(400, "The user does not exist.", null);
         return result;
     }
 

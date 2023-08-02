@@ -8,8 +8,9 @@ import config from "../../config";
 export default function Login(){
 
 	const navigate = useNavigate()
-	const email = useRef(null)
-	const password = useRef(null)
+	const emailRef = useRef(null)
+	const passwordRef = useRef(null)
+	const usernameRef = useRef(null)
 	const [isRegister, setIsRegister] = useState(false);
 	const register = useRef(null)
 	const login = useRef(null)
@@ -26,14 +27,15 @@ export default function Login(){
 
     function handleSubmit(event){
         event.preventDefault(); // 👈️ prevent page refresh
-		let emailValue = email.current.value
-		let passwordValue = password.current.value
+		let emailValue = emailRef.current.value
+		let passwordValue = passwordRef.current.value
 		if (isRegister){
+			let username = usernameRef.current.value;
 			$.ajax({
 				url: config.registerUrl,
 				type: 'POST',
 				contentType: 'application/json',
-				data: JSON.stringify({ username: emailValue, password: passwordValue }),
+				data: JSON.stringify({ email: emailValue, password: passwordValue, username: username }),
 				success: function(result) {
 					let statusCode = result.code;
 					let message = result.message;
@@ -49,7 +51,7 @@ export default function Login(){
 				url: config.loginUrl,
 				type: "POST",
 				contentType: "application/json",
-				data: JSON.stringify({username:emailValue, password:passwordValue}),
+				data: JSON.stringify({email: emailValue, password: passwordValue}),
 				success: function(result){
 					let statusCode = result.code;
 					let message = result.message;
@@ -208,17 +210,25 @@ export default function Login(){
 					</span>
 
 					<div className="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						<input className="input100" type="text" name="email" ref={email}></input>
-						<span className="focus-input100" data-placeholder="Username"></span>
+						<input className="input100" type="text" name="email" ref={emailRef}></input>
+						<span className="focus-input100" data-placeholder="Email"></span>
 					</div>
 
 					<div className="wrap-input100 validate-input" data-validate="Enter password">
 						<span className="btn-show-pass">
 							<i className="zmdi zmdi-eye"></i>
 						</span>
-						<input className="input100" type="password" name="pass" ref={password}></input>
+						<input className="input100" type="password" name="pass" ref={passwordRef}></input>
 						<span className="focus-input100" data-placeholder="Password"></span>
 					</div>
+
+					{
+						isRegister && 
+						<div className="wrap-input100 validate-input">
+							<input className="input100" type="text" name="pass" ref={usernameRef}></input>
+							<span className="focus-input100" data-placeholder="Username"></span>
+						</div>
+					}
 
 					<div className="container-login100-form-btn">
 						<div className="wrap-login100-form-btn">

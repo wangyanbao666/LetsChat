@@ -38,7 +38,7 @@ export default function AddConnectionUserCard(props){
     return(
         <div className="user-card" onClick={sendInvitation}>
             <img src={props.imgSrc} className="user-card-img"></img>
-            <div>{props.username}</div>
+            <div className="username">{props.username}</div>
 
         </div>
     )

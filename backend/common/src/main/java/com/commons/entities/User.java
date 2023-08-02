@@ -19,9 +19,9 @@ public class User {
     private String password;
     private List<Long> connections = new ArrayList<>();
     private String email;
-    private List<Long> groupIds = new ArrayList<>();;
+    private List<Long> groupIds = new ArrayList<>();
+    private int verified;
     private int status;
     private Timestamp lastOnline;
-
 
 }
